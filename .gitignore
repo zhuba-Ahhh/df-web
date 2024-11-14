@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+coverage
+.eslintcache
+pnpm-lock.yaml
+*.log
+stats.html
+.vscode
+yarn.lock
+package-lock.json
