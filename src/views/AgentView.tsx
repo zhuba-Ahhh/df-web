@@ -21,18 +21,20 @@ const AgentView = () => {
     return null;
   }
   return (
-    <div className={`h-96 w-full relative`}>
+    <div className={`h-[1000px] relative`}>
       <img
-        className="object-fill absolute w-full"
+        className="object-fill absolute w-[100%]"
         src={currentAgent.pic}
         alt={currentAgent.operator}
       />
       <Swiper
-        className={`w-8/12`}
+        className={`w-8/12 absolute bottom-4`}
         spaceBetween={50}
         slidesPerView={5}
         navigation={{
-          enabled: false,
+          // nextEl: '.swiper-button-next',
+          // prevEl: '.swiper-button-prev',
+          enabled: true,
         }}
         modules={[Navigation, Scrollbar, A11y]}
         onSlideChange={() => console.log('slide change')}
