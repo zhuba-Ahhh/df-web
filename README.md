@@ -4,21 +4,17 @@
 
 ### 前端
 
+仓库：[https://github.com/zhuba-Ahhh/df-web](https://github.com/zhuba-Ahhh/df-web)
+地址：[https://df-web-delta.vercel.app](https://df-web-delta.vercel.app/)
+
 - React + Vite
 - Tailwind + Daisyui 样式
 - Vercel 部署
 
 ### 后端
 
-地址：[https://github.com/zhuba-Ahhh/novel-api](https://github.com/zhuba-Ahhh/novel-api)
+仓库：[https://github.com/zhuba-Ahhh/novel-api](https://github.com/zhuba-Ahhh/novel-api)
+地址：[https://df-api.vercel.app](https://df-api.vercel.app)
 
 - nestJs
 - Vercel 部署
-
-## 问题记录
-
-### Vercel部署路由刷新后404
-
-增加 `vercel.json` 配置，设置 `rewrites`
-
-![alt text](image.png)
