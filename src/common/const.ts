@@ -1,3 +1,10 @@
-const COVER_BASE_URL = 'http://static.zongheng.com/upload/';
+const colors = [
+  '#748084', // L1
+  '#238d6f', // L2
+  '#3a749f', // L3
+  '#6c57a0', // L4
+  '#8a5e3e', // L5
+  '#97434c', // L6
+];
 
-export { COVER_BASE_URL };
+export { colors };
