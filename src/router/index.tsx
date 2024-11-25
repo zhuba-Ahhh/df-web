@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
 import { PropsView } from 'views/PropsView';
+import { ArmsView } from 'views/ArmsView';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,14 @@ const router = createBrowserRouter([
       {
         path: '/props/:type',
         element: <PropsView />,
+      },
+      {
+        path: '/arms',
+        element: <ArmsView />,
+      },
+      {
+        path: '/arms/:type',
+        element: <ArmsView />,
       },
     ],
   },

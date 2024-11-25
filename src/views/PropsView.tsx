@@ -1,6 +1,6 @@
 import { colors } from 'common/const';
 import WeightGrid from 'components/WeightGrid';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { http } from 'utils/request';
 
@@ -55,16 +55,16 @@ interface propsDataType {
 
 const PropsView = () => {
   const [propsData, setPropsData] = useState<propsDataType>({});
-  const { type } = useParams();
+  const { type = 'collection' } = useParams();
 
-  const getAgents = async () => {
-    const res = await http.get<propsDataType>(`/props/getProps`);
+  const getAgents = useCallback(async () => {
+    const res = await http.get<propsDataType>(`/props/getProps?type=${type}`);
     setPropsData(res);
-  };
+  }, [type]);
 
   useEffect(() => {
     getAgents();
-  }, []);
+  }, [getAgents]);
   return (
     <div className="flex flex-col mb-5">
       {(type === 'collection' || !type) && (
@@ -80,7 +80,7 @@ const PropsView = () => {
       )}
       {(type === 'consume' || !type) && (
         <>
-          <div className="divider">消耗品</div>
+          <div className="divider px-4">消耗品</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.consume?.map((item) => {
@@ -91,7 +91,7 @@ const PropsView = () => {
       )}
       {(type === 'key' || !type) && (
         <>
-          <div className="divider">钥匙</div>
+          <div className="divider px-4">钥匙</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.key?.map((item) => {
@@ -102,7 +102,7 @@ const PropsView = () => {
       )}
       {(type === 'mandel' || !type) && (
         <>
-          <div className="divider">曼德尔砖</div>
+          <div className="divider px-4">曼德尔砖</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.mandel?.map((item) => {
@@ -119,7 +119,7 @@ const CardRender = ({ data }: { data: propsType }) => {
   return (
     <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
       <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
-        <img src={data.pic} alt={data.objectName} className="h-60 object-cover" />
+        <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -154,7 +154,9 @@ const CardRender = ({ data }: { data: propsType }) => {
               <div className="badge badge-outline collapse mb-1">{data.propsDetail.usePlace}</div>
             )}
             {data.propsDetail.durability && (
-              <div className="badge badge-outline collapse">{data.propsDetail.durability}次</div>
+              <div className="badge badge-outline collapse mb-1">
+                {data.propsDetail.durability}次
+              </div>
             )}
 
             {data.propsDetail.replyEffect && (
