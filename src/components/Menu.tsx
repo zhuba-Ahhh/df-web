@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // 定义菜单项类型
 type MenuItem = {
@@ -145,7 +145,12 @@ const items: MenuItem[] = [
 
 const Menu = () => {
   const navigate = useNavigate();
-  const [activeKey, setActiveKey] = useState('agent');
+  const location = useLocation();
+  const { pathname } = location;
+  const pathnameArr = pathname.replace(/^\//, '').split('/');
+  const [activeKey, setActiveKey] = useState(
+    pathnameArr.length > 0 ? pathnameArr[pathnameArr.length - 1] : 'agent'
+  );
   const renderMenu = (items: MenuItem[]) => (
     <ul className="menu bg-base-200 p-0 [&_li>*]:rounded-none">
       {items.map((item) => (

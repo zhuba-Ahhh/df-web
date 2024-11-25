@@ -18,11 +18,13 @@ function App() {
   return (
     <>
       <Navbar />
-      <main className="container min-h-[100vh] max-w-[100vw] pt-[64px] flex">
-        <div className="w-[160px]">
+      <main className="container max-w-[100vw] pt-[64px] flex h-[100vh] overflow-y-hidden">
+        <div className="w-[160px] min-h-[100vh] overflow-y-auto">
           <Menu />
         </div>
-        <div className="w-[calc(100vw-160px)]">{isLoading ? <Loading /> : <Outlet />}</div>
+        <div className="min-h-[100vh - 64px] w-[calc(100vw-160px)] overflow-y-auto">
+          {isLoading ? <Loading /> : <Outlet />}
+        </div>
       </main>
     </>
   );
