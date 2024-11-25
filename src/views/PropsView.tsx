@@ -1,6 +1,7 @@
 import { colors } from 'common/const';
 import WeightGrid from 'components/WeightGrid';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { http } from 'utils/request';
 
 interface propsType {
@@ -21,8 +22,28 @@ interface propsType {
 }
 
 interface PropsDetail {
-  type: string;
+  type: string; // collection
   propsSource: string;
+
+  availableCount: number; // consume
+  activeTime: string;
+
+  hearEnhance: string;
+  bearEnhance: string;
+  bodyCapacity: string;
+
+  repairPoints: number;
+  repairArea: string;
+  repairEfficiency: string;
+  replyEffect: string;
+
+  avaRatio: string; // mandel
+  core: Array<{ skinID: number; ratio: string; pic: string }>;
+  other: Array<{ skinID: number; ratio: string; pic: string }>;
+
+  useMap: string; // key
+  usePlace: string;
+  durability: number;
 }
 
 interface propsDataType {
@@ -34,6 +55,7 @@ interface propsDataType {
 
 const PropsView = () => {
   const [propsData, setPropsData] = useState<propsDataType>({});
+  const { type } = useParams();
 
   const getAgents = async () => {
     const res = await http.get<propsDataType>(`/props/getProps`);
@@ -44,35 +66,51 @@ const PropsView = () => {
     getAgents();
   }, []);
   return (
-    <div className="flex flex-col">
-      <h2 className="card-title mx-20 mt-2">收集品</h2>
-      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-        {propsData &&
-          propsData.collection?.map((item) => {
-            return <CardRender key={item.id} data={item} />;
-          })}
-      </div>
-      <h2 className="card-title mx-20 mt-2">消耗品</h2>
-      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-        {propsData &&
-          propsData.consume?.map((item) => {
-            return <CardRender key={item.id} data={item} />;
-          })}
-      </div>
-      <h2 className="card-title mx-20 mt-2">钥匙</h2>
-      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-        {propsData &&
-          propsData.key?.map((item) => {
-            return <CardRender key={item.id} data={item} />;
-          })}
-      </div>
-      <h2 className="card-title mx-20 mt-2">曼德尔砖</h2>
-      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-        {propsData &&
-          propsData.mandel?.map((item) => {
-            return <CardRender key={item.id} data={item} />;
-          })}
-      </div>
+    <div className="flex flex-col mb-5">
+      {(type === 'collection' || !type) && (
+        <>
+          <div className="divider px-4">收集品</div>
+          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+            {propsData &&
+              propsData.collection?.map((item) => {
+                return <CardRender key={item.id} data={item} />;
+              })}
+          </div>
+        </>
+      )}
+      {(type === 'consume' || !type) && (
+        <>
+          <div className="divider">消耗品</div>
+          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+            {propsData &&
+              propsData.consume?.map((item) => {
+                return <CardRender key={item.id} data={item} />;
+              })}
+          </div>
+        </>
+      )}
+      {(type === 'key' || !type) && (
+        <>
+          <div className="divider">钥匙</div>
+          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+            {propsData &&
+              propsData.key?.map((item) => {
+                return <CardRender key={item.id} data={item} />;
+              })}
+          </div>
+        </>
+      )}
+      {(type === 'mandel' || !type) && (
+        <>
+          <div className="divider">曼德尔砖</div>
+          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+            {propsData &&
+              propsData.mandel?.map((item) => {
+                return <CardRender key={item.id} data={item} />;
+              })}
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -86,9 +124,11 @@ const CardRender = ({ data }: { data: propsType }) => {
       <div className="card-body">
         <h2 className="card-title">
           {data.objectName}
-          <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
-            {data.secondClassCN}
-          </div>
+          {data.secondClass !== 'mandel' && (
+            <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
+              {data.secondClassCN}
+            </div>
+          )}
         </h2>
         <p>{data.desc}</p>
         <div className="card-actions justify-between">
@@ -107,6 +147,51 @@ const CardRender = ({ data }: { data: propsType }) => {
                   {item}
                 </div>
               ))}
+            {data.propsDetail.useMap && (
+              <div className="badge badge-outline collapse mb-1">{data.propsDetail.usePlace}</div>
+            )}
+            {data.propsDetail.usePlace && (
+              <div className="badge badge-outline collapse mb-1">{data.propsDetail.usePlace}</div>
+            )}
+            {data.propsDetail.durability && (
+              <div className="badge badge-outline collapse">{data.propsDetail.durability}次</div>
+            )}
+
+            {data.propsDetail.replyEffect && (
+              <div className="badge badge-outline collapse mb-1">
+                效果：{data.propsDetail.replyEffect}
+              </div>
+            )}
+            {data.propsDetail.hearEnhance && (
+              <div className="badge badge-outline collapse mb-1">
+                效果：{data.propsDetail.hearEnhance}
+              </div>
+            )}
+            {data.propsDetail.bearEnhance && (
+              <div className="badge badge-outline collapse mb-1">
+                效果：{data.propsDetail.bearEnhance}
+              </div>
+            )}
+            {data.propsDetail.bodyCapacity && (
+              <div className="badge badge-outline collapse mb-1">
+                效果：{data.propsDetail.bodyCapacity}
+              </div>
+            )}
+            {data.propsDetail.repairPoints && (
+              <div className="badge badge-outline collapse mb-1">
+                修理点：{data.propsDetail.repairPoints}
+              </div>
+            )}
+            {data.propsDetail.availableCount && (
+              <div className="badge badge-outline collapse mb-1">
+                可用次数：{data.propsDetail.availableCount}
+              </div>
+            )}
+            {data.propsDetail.activeTime && (
+              <div className="badge badge-outline collapse mb-1">
+                持续时间：{data.propsDetail.activeTime}
+              </div>
+            )}
           </div>
         </div>
       </div>

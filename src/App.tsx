@@ -19,14 +19,10 @@ function App() {
     <>
       <Navbar />
       <main className="container min-h-[100vh] max-w-[100vw] pt-[64px] flex">
-        <Menu />
-        {isLoading ? (
-          <div className="w-[calc(100vw-160px)]">
-            <Loading />
-          </div>
-        ) : (
-          <Outlet />
-        )}
+        <div className="w-[160px]">
+          <Menu />
+        </div>
+        <div className="w-[calc(100vw-160px)]">{isLoading ? <Loading /> : <Outlet />}</div>
       </main>
     </>
   );

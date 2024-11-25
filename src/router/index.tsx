@@ -11,6 +11,10 @@ const router = createBrowserRouter([
         path: '/props',
         element: <PropsView />,
       },
+      {
+        path: '/props/:type',
+        element: <PropsView />,
+      },
     ],
   },
   {

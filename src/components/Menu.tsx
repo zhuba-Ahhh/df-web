@@ -27,20 +27,20 @@ const items: MenuItem[] = [
       {
         key: 'consume',
         label: '消耗品',
-        children: [
-          {
-            key: 'repair',
-            label: '维修套件',
-          },
-          {
-            key: 'drug',
-            label: '药品',
-          },
-          {
-            key: 'inject',
-            label: '针剂',
-          },
-        ],
+        // children: [
+        //   {
+        //     key: 'repair',
+        //     label: '维修套件',
+        //   },
+        //   {
+        //     key: 'drug',
+        //     label: '药品',
+        //   },
+        //   {
+        //     key: 'inject',
+        //     label: '针剂',
+        //   },
+        // ],
       },
       { key: 'key', label: '钥匙' },
       { key: 'mandel', label: '曼德尔砖' },
@@ -147,7 +147,7 @@ const Menu = () => {
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState('agent');
   const renderMenu = (items: MenuItem[]) => (
-    <ul className="menu bg-base-200 w-40 p-0 [&_li>*]:rounded-none">
+    <ul className="menu bg-base-200 p-0 [&_li>*]:rounded-none">
       {items.map((item) => (
         <li
           key={item.key}
