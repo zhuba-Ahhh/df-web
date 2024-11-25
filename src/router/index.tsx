@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
 import { PropsView } from 'views/PropsView';
 import { ArmsView } from 'views/ArmsView';
+import { ProtectView } from 'views/ProtectView';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: '/arms/:type',
         element: <ArmsView />,
+      },
+      {
+        path: '/protect',
+        element: <ProtectView />,
+      },
+      {
+        path: '/protect/:type',
+        element: <ProtectView />,
       },
     ],
   },

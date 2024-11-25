@@ -83,7 +83,7 @@ const ArmsView = () => {
     <div className="flex flex-col mb-5">
       {armsData?.list && (
         <>
-          <div className="divider px-4">
+          <div className="divider px-8 mt-8">
             {!type || type === 'all' ? '武器' : armsData.list[0].secondClassCN}
           </div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">

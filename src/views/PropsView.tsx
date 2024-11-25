@@ -69,7 +69,7 @@ const PropsView = () => {
     <div className="flex flex-col mb-5">
       {(type === 'collection' || !type) && (
         <>
-          <div className="divider px-4">收集品</div>
+          <div className="divider px-8 mt-8">收集品</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.collection?.map((item) => {
@@ -80,7 +80,7 @@ const PropsView = () => {
       )}
       {(type === 'consume' || !type) && (
         <>
-          <div className="divider px-4">消耗品</div>
+          <div className="divider px-8 mt-8">消耗品</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.consume?.map((item) => {
@@ -91,7 +91,7 @@ const PropsView = () => {
       )}
       {(type === 'key' || !type) && (
         <>
-          <div className="divider px-4">钥匙</div>
+          <div className="divider px-8 mt-8">钥匙</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.key?.map((item) => {
@@ -102,7 +102,7 @@ const PropsView = () => {
       )}
       {(type === 'mandel' || !type) && (
         <>
-          <div className="divider px-4">曼德尔砖</div>
+          <div className="divider px-8 mt-8">曼德尔砖</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
             {propsData &&
               propsData.mandel?.map((item) => {
