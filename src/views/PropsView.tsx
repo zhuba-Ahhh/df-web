@@ -55,10 +55,10 @@ interface propsDataType {
 
 const PropsView = () => {
   const [propsData, setPropsData] = useState<propsDataType>({});
-  const { type = 'collection' } = useParams();
+  const { type } = useParams();
 
   const getAgents = useCallback(async () => {
-    const res = await http.get<propsDataType>(`/props/getProps?type=${type}`);
+    const res = await http.get<propsDataType>(`/props/getProps?type=${type || 'all'}`);
     setPropsData(res);
   }, [type]);
 

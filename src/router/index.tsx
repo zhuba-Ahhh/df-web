@@ -3,6 +3,7 @@ import App from '../App';
 import { PropsView } from 'views/PropsView';
 import { ArmsView } from 'views/ArmsView';
 import { ProtectView } from 'views/ProtectView';
+import { AccView } from 'views/Acc';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: '/protect/:type',
         element: <ProtectView />,
+      },
+      {
+        path: '/acc',
+        element: <AccView />,
+      },
+      {
+        path: '/acc/:type',
+        element: <AccView />,
       },
     ],
   },
