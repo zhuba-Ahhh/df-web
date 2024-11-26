@@ -2,6 +2,7 @@ import { colors } from 'common/const';
 import WeightGrid from 'components/WeightGrid';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { JSX } from 'react/jsx-runtime';
 import { http } from 'utils/request';
 
 type AmmoDetail = {
@@ -79,20 +80,44 @@ const ArmsView = () => {
   useEffect(() => {
     getAgents();
   }, [getAgents]);
-  return (
-    <div className="flex flex-col mb-5">
-      {armsData?.list && (
-        <>
-          <div className="divider px-8 mt-8">
-            {!type || type === 'all' ? '武器' : armsData.list[0].secondClassCN}
+
+  const ListRender = useCallback(() => {
+    if (!armsData?.list || armsData?.list?.length < 1) return null;
+    const res: JSX.Element[] = [
+      <div className="divider px-8 mt-8" key={armsData.list[0].secondClassCN}>
+        {armsData.list[0].secondClassCN}
+      </div>,
+    ];
+    let temp: JSX.Element[] = [];
+    armsData?.list.forEach((item, index, arr) => {
+      if (
+        (index < arr.length - 1 && item.secondClass !== arr[index + 1].secondClass) ||
+        (index === arr.length - 2 && item.secondClass === arr[index + 1].secondClass)
+      ) {
+        temp.push(<CardRender key={item.id} data={item} />);
+        res.push(
+          <div
+            className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]"
+            key={index}
+          >
+            {temp.map((item) => item)}
           </div>
-          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {armsData.list?.map((item) => <CardRender key={item.id} data={item} />)}
-          </div>
-        </>
-      )}
-    </div>
-  );
+        );
+        item.secondClass !== arr[index + 1].secondClass &&
+          res.push(
+            <div className="divider px-8 mt-8" key={arr[index + 1].secondClassCN}>
+              {arr[index + 1].secondClassCN}
+            </div>
+          );
+        temp = [];
+      } else {
+        temp.push(<CardRender key={item.id} data={item} />);
+      }
+    });
+
+    return res;
+  }, [armsData.list]);
+  return <div className="flex flex-col mb-5">{armsData?.list && <ListRender />}</div>;
 };
 
 const CardRender = ({ data }: { data: GunItem }) => {
@@ -116,6 +141,21 @@ const CardRender = ({ data }: { data: GunItem }) => {
             <div>{data.weight}kg</div>
             {/* <div>{`${data.length} X ${data.width}  ${data.length * data.width} 格`}</div> */}
             <WeightGrid width={Number(data.width)} length={Number(data.length)} />
+          </div>
+          <div className="w-40">
+            {data?.gunDetail?.capacity && (
+              <div className="badge badge-outline collapse mb-1">
+                装弹量： {data.gunDetail.capacity} 发
+              </div>
+            )}
+            {data?.gunDetail?.caliber && (
+              <div className="badge badge-outline collapse mb-1">
+                口径： {data.gunDetail.caliber}
+              </div>
+            )}
+            {data?.gunDetail?.fireMode && (
+              <div className="badge badge-outline collapse mb-1">{data.gunDetail.fireMode}</div>
+            )}
           </div>
         </div>
       </div>
