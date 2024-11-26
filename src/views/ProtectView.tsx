@@ -47,7 +47,6 @@ const ProtectView = () => {
 
   const getAgents = useCallback(async () => {
     const res = await http.get<protectType>(`/protect/getProtect?type=${type}`);
-    console.log('[43m [ res ]-50-「views/ProtectView.tsx」 [0m', res);
     setPropsData(res);
   }, [type]);
 
@@ -56,47 +55,43 @@ const ProtectView = () => {
   }, [getAgents]);
   return (
     <div className="flex flex-col mb-5">
-      {(type === 'helmet' || !type) && (
+      {(type === 'helmet' || !type) && propsData.helmet && (
         <>
           <div className="divider px-8 mt-8">头盔</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.helmet?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.helmet?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'armor' || !type) && (
+      {(type === 'armor' || !type) && propsData.armor && (
         <>
           <div className="divider px-8 mt-8">护甲</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.armor?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.armor?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'bag' || !type) && (
+      {(type === 'bag' || !type) && propsData.bag && (
         <>
           <div className="divider px-8 mt-8">背包</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.bag?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.bag?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'chest' || !type) && (
+      {(type === 'chest' || !type) && propsData.chest && (
         <>
           <div className="divider px-8 mt-8">胸挂</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.chest?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.chest?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}

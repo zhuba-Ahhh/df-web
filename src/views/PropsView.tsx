@@ -67,40 +67,37 @@ const PropsView = () => {
   }, [getAgents]);
   return (
     <div className="flex flex-col mb-5">
-      {(type === 'collection' || !type) && (
+      {(type === 'collection' || !type) && propsData.collection && (
         <>
           <div className="divider px-8 mt-8">收集品</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.collection?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.collection?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'consume' || !type) && (
+      {(type === 'consume' || !type) && propsData.consume && (
         <>
           <div className="divider px-8 mt-8">消耗品</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.consume?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.consume?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'key' || !type) && (
+      {(type === 'key' || !type) && propsData.key && (
         <>
           <div className="divider px-8 mt-8">钥匙</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {propsData &&
-              propsData.key?.map((item) => {
-                return <CardRender key={item.id} data={item} />;
-              })}
+            {propsData.key?.map((item) => {
+              return <CardRender key={item.id} data={item} />;
+            })}
           </div>
         </>
       )}
-      {(type === 'mandel' || !type) && (
+      {(type === 'mandel' || !type) && propsData.mandel && (
         <>
           <div className="divider px-8 mt-8">曼德尔砖</div>
           <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
