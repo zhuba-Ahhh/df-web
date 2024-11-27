@@ -145,6 +145,11 @@ const CardRender = ({ data }: { data: ProtectItem }) => {
                   移动速度： {data?.protectDetail?.moveSpeed?.percent}%
                 </div>
               )}
+            {data?.protectDetail?.aimSpeed && typeof data?.protectDetail?.aimSpeed !== 'string' && (
+              <div className="badge badge-outline collapse mb-1">
+                武器操作： {data?.protectDetail?.aimSpeed?.percent}%
+              </div>
+            )}
             {data?.protectDetail?.faceMask && typeof data?.protectDetail?.faceMask !== 'string' && (
               <div className="badge badge-outline collapse mb-1">
                 影响： {data?.protectDetail?.faceMask?.value}

@@ -11,42 +11,26 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/props',
+        path: '/props/:type?',
         element: <PropsView />,
       },
       {
-        path: '/props/:type',
-        element: <PropsView />,
-      },
-      {
-        path: '/arms',
+        path: '/arms/:type?',
         element: <ArmsView />,
       },
       {
-        path: '/arms/:type',
-        element: <ArmsView />,
-      },
-      {
-        path: '/protect',
+        path: '/protect/:type?',
         element: <ProtectView />,
       },
       {
-        path: '/protect/:type',
-        element: <ProtectView />,
-      },
-      {
-        path: '/acc',
-        element: <AccView />,
-      },
-      {
-        path: '/acc/:type',
+        path: '/acc/:type?',
         element: <AccView />,
       },
     ],
   },
   {
     path: '*', // 匹配所有未定义的路径
-    element: <Navigate to="/" />, // 重定向到首页
+    element: <Navigate to="/" replace />, // 重定向到首页
   },
 ]);
 
