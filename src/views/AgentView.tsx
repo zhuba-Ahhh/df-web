@@ -1,25 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AgentType } from 'types';
 import { http } from 'utils/request';
 import { Navigation, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useParams } from 'react-router-dom';
+import { agentsNameMap } from 'common/const';
 
 const AgentView = () => {
+  const { type = 'all' } = useParams();
   const [agents, setAgents] = useState<AgentType[]>([]);
   const [currentAgent, setCurrentAgent] = useState<AgentType | null>(null);
 
-  const getAgents = async () => {
-    const res = await http.get<AgentType[]>(`/agent/getAgents`);
-    setAgents(res);
-    setCurrentAgent(res[0]);
-  };
+  const filterAgentsByType = useCallback(
+    (agents: AgentType[]) => {
+      if (type === 'all') return agents;
+      const currentTypeName = agentsNameMap.find((agentsName) => agentsName.key === type)?.label;
+      return agents.filter((item) => item.armyType === currentTypeName);
+    },
+    [type]
+  );
+
+  const getAgents = useCallback(async () => {
+    const res = await http.get<AgentType[]>('/agent/getAgents');
+    const filteredAgents = filterAgentsByType(res);
+    setAgents(filteredAgents);
+  }, [filterAgentsByType]);
+
+  useEffect(() => {
+    setCurrentAgent(agents[0]);
+  }, [agents]);
 
   useEffect(() => {
     getAgents();
-  }, []);
-  if (!currentAgent) {
-    return null;
-  }
+  }, [getAgents]);
+
+  useEffect(() => {
+    setAgents((prev) => filterAgentsByType(prev));
+  }, [type, filterAgentsByType]);
+
+  if (!currentAgent) return null;
+
   return (
     <div className={`h-[1000px] relative`}>
       <img

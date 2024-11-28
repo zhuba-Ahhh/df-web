@@ -7,4 +7,11 @@ const colors = [
   '#97434c', // L6
 ];
 
-export { colors };
+const agentsNameMap = [
+  { key: 'assault', label: '突击' },
+  { key: 'project', label: '工程' },
+  { key: 'support', label: '支援' },
+  { key: 'scout', label: '侦察' },
+];
+
+export { colors, agentsNameMap };

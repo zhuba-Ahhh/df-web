@@ -1,3 +1,4 @@
+import { agentsNameMap } from 'common/const';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -12,12 +13,7 @@ const items: MenuItem[] = [
   {
     key: 'agent',
     label: '干员',
-    children: [
-      { key: 'assault', label: '突击' },
-      { key: 'project', label: '工程' },
-      { key: 'support', label: '支援' },
-      { key: 'scout', label: '侦察' },
-    ],
+    children: agentsNameMap,
   },
   {
     key: 'props',
