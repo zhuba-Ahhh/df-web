@@ -49,52 +49,67 @@ const AccView = () => {
   const [accData, setAccData] = useState<ListDataType>({});
   const { type } = useParams();
 
-  const getAgents = useCallback(async () => {
+  const fetchAccessories = useCallback(async () => {
     const res = await http.get<ListDataType>(`/accessories/getAccessories?type=${type || 'all'}`);
     setAccData(res);
   }, [type]);
 
   useEffect(() => {
-    getAgents();
-  }, [getAgents]);
+    fetchAccessories();
+  }, [fetchAccessories]);
 
   return (
     <div className="flex flex-col mb-5">
-      {(type === 'accForeGrip' || !type) && accData.accForeGrip && (
-        <>
-          <div className="divider px-8 mt-8">前握把</div>
-          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {accData.accForeGrip?.map((item) => {
-              return <CardRender key={item.id} data={item} />;
-            })}
-          </div>
-        </>
-      )}
-      {(type === 'accFunctional' || !type) && accData.accFunctional && (
-        <>
-          <div className="divider px-8 mt-8">功能性配件</div>
-          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
-            {accData.accFunctional?.map((item) => {
-              return <CardRender key={item.id} data={item} />;
-            })}
-          </div>
-        </>
-      )}
+      <AccessorySection
+        show={type === 'accForeGrip' || !type}
+        items={accData.accForeGrip}
+        title="前握把"
+      />
+      <AccessorySection
+        show={type === 'accFunctional' || !type}
+        items={accData.accFunctional}
+        title="功能性配件"
+      />
     </div>
   );
 };
 
-const CardRender = ({ data }: { data: AccItem }) => {
+const AccessorySection = ({
+  show,
+  items,
+  title,
+}: {
+  show: boolean;
+  items?: AccItem[];
+  title: string;
+}) => {
+  if (!show || !items) return null;
+
+  return (
+    <>
+      <div className="divider px-8 mt-8">{title}</div>
+      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+        {items.map((item) => (
+          <AccessoryCard key={item.id} data={item} />
+        ))}
+      </div>
+    </>
+  );
+};
+
+const AccessoryCard = ({ data }: { data: AccItem }) => {
+  const bgColor = { backgroundColor: colors[data.grade - 1] };
+
   return (
     <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
-      <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
+      <figure style={bgColor} className="p-4">
         <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
           {data.objectName}
           {data.secondClass !== 'mandel' && (
-            <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
+            <div className="badge" style={bgColor}>
               {data.secondClassCN}
             </div>
           )}
@@ -103,14 +118,9 @@ const CardRender = ({ data }: { data: AccItem }) => {
         <div className="card-actions justify-between">
           <div>
             <div>{data.weight}kg</div>
-            {/* <div>{`${data.length} X ${data.width}  ${data.length * data.width} 格`}</div> */}
             <WeightGrid width={Number(data.width)} length={Number(data.length)} />
           </div>
-          <div className="w-40">
-            {/* {data?.gunDetail?.fireMode && (
-              <div className="badge badge-outline collapse mb-1">{data.gunDetail.fireMode}</div>
-            )} */}
-          </div>
+          <div className="w-40" />
         </div>
       </div>
     </div>

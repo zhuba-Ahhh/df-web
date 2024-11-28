@@ -82,85 +82,84 @@ const ArmsView = () => {
   }, [getAgents]);
 
   const ListRender = useCallback(() => {
-    if (!armsData?.list || armsData?.list?.length < 1) return null;
-    const res: JSX.Element[] = [
-      <div className="divider px-8 mt-8" key={armsData.list[0].secondClassCN}>
-        {armsData.list[0].secondClassCN}
-      </div>,
-    ];
-    let temp: JSX.Element[] = [];
-    armsData?.list.forEach((item, index, arr) => {
-      if (
-        (index < arr.length - 1 && item.secondClass !== arr[index + 1].secondClass) ||
-        (index === arr.length - 2 && item.secondClass === arr[index + 1].secondClass)
-      ) {
-        temp.push(<CardRender key={item.id} data={item} />);
-        res.push(
-          <div
-            className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]"
-            key={index}
-          >
-            {temp.map((item) => item)}
+    if (!armsData?.list?.length) return null;
+
+    return armsData.list.reduce((acc: JSX.Element[], item, index, arr) => {
+      const isNewSection = index === 0 || item.secondClass !== arr[index - 1].secondClass;
+      const isLastItem = index === arr.length - 1;
+
+      if (isNewSection) {
+        acc.push(
+          <div className="divider px-8 mt-8" key={`divider-${item.secondClassCN}`}>
+            {item.secondClassCN}
           </div>
         );
-        item.secondClass !== arr[index + 1].secondClass &&
-          res.push(
-            <div className="divider px-8 mt-8" key={arr[index + 1].secondClassCN}>
-              {arr[index + 1].secondClassCN}
-            </div>
-          );
-        temp = [];
-      } else {
-        temp.push(<CardRender key={item.id} data={item} />);
       }
-    });
 
-    return res;
+      if (isLastItem || arr[index + 1]?.secondClass !== item.secondClass) {
+        acc.push(
+          <div
+            className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]"
+            key={`section-${index}`}
+          >
+            {arr
+              .slice(
+                isNewSection ? index : arr.findIndex((x) => x.secondClass === item.secondClass),
+                index + 1
+              )
+              .map((gun) => (
+                <CardRender key={gun.id} data={gun} />
+              ))}
+          </div>
+        );
+      }
+
+      return acc;
+    }, []);
   }, [armsData.list]);
+
   return <div className="flex flex-col mb-5">{armsData?.list && <ListRender />}</div>;
 };
 
-const CardRender = ({ data }: { data: GunItem }) => {
-  return (
-    <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
-      <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
-        <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">
-          {data.objectName}
-          {data.secondClass !== 'mandel' && (
-            <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
-              {data.secondClassCN}
-            </div>
-          )}
-        </h2>
-        <p>{data.desc}</p>
-        <div className="card-actions justify-between">
-          <div>
-            <div>{data.weight}kg</div>
-            {/* <div>{`${data.length} X ${data.width}  ${data.length * data.width} 格`}</div> */}
-            <WeightGrid width={Number(data.width)} length={Number(data.length)} />
+const GunBadge = ({ gunDetail }: { gunDetail: GunDetail }) => (
+  <div className="w-40">
+    {[
+      { value: gunDetail.capacity, label: `装弹量： ${gunDetail.capacity} 发` },
+      { value: gunDetail.caliber, label: `口径： ${gunDetail.caliber}` },
+      { value: gunDetail.fireMode, label: gunDetail.fireMode },
+    ].map(
+      ({ value, label }) =>
+        value && (
+          <div key={label} className="badge badge-outline collapse mb-1">
+            {label}
           </div>
-          <div className="w-40">
-            {data?.gunDetail?.capacity && (
-              <div className="badge badge-outline collapse mb-1">
-                装弹量： {data.gunDetail.capacity} 发
-              </div>
-            )}
-            {data?.gunDetail?.caliber && (
-              <div className="badge badge-outline collapse mb-1">
-                口径： {data.gunDetail.caliber}
-              </div>
-            )}
-            {data?.gunDetail?.fireMode && (
-              <div className="badge badge-outline collapse mb-1">{data.gunDetail.fireMode}</div>
-            )}
-          </div>
+        )
+    )}
+  </div>
+);
+
+const CardRender = ({ data }: { data: GunItem }) => (
+  <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
+    <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
+      <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
+    </figure>
+    <div className="card-body">
+      <h2 className="card-title">
+        {data.objectName}
+        <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
+          {data.secondClassCN}
         </div>
+      </h2>
+      <p>{data.desc}</p>
+      <div className="card-actions justify-between">
+        <div>
+          <div>{data.weight}kg</div>
+          <WeightGrid width={Number(data.width)} length={Number(data.length)} />
+        </div>
+        <GunBadge gunDetail={data.gunDetail} />
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export { ArmsView };
