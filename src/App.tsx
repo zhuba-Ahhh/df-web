@@ -22,7 +22,7 @@ function App() {
         <div className="w-[160px] min-h-[100vh] overflow-y-auto">
           <Menu />
         </div>
-        <div className="min-h-[100vh - 64px] w-[calc(100vw-160px)] overflow-y-auto">
+        <div className="min-h-[calc(100vh - 64px)] w-[calc(100vw-160px)] overflow-y-auto">
           {isLoading ? <Loading /> : <Outlet />}
         </div>
       </main>
