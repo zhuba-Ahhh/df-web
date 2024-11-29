@@ -56,6 +56,32 @@ const AgentView = () => {
 
   return (
     <div className="h-full relative">
+      {currentAgent && (
+        <div className="absolute left-4 bottom-4 z-10 bg-black/50 p-4 rounded-lg text-white w-80">
+          <h2 className="text-2xl font-bold mb-2">{currentAgent.operator}</h2>
+          <p className="text-sm text-gray-300 mb-4">{currentAgent.fullName}</p>
+
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <img src={currentAgent.armyTypePic} alt={currentAgent.armyType} className="w-6 h-6" />
+              <span>{currentAgent.armyType}</span>
+            </div>
+            <p className="text-sm text-gray-300">{currentAgent.armyTypeDesc}</p>
+          </div>
+
+          <div className="space-y-4">
+            {currentAgent.abilitiesList.map((ability) => (
+              <div key={ability.abilityName} className="flex gap-3">
+                <img src={ability.abilityPic} alt={ability.abilityName} className="w-12 h-12" />
+                <div>
+                  <h3 className="font-medium">{ability.abilityName}</h3>
+                  <p className="text-sm text-gray-300">{ability.abilityDesc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <img
         className="object-contain absolute w-full h-full"
         src={currentAgent.pic}
@@ -63,7 +89,7 @@ const AgentView = () => {
         loading="eager"
       />
       <Swiper
-        className="w-8/12 absolute bottom-4"
+        className="w-8/12 absolute bottom-[-2rem]"
         spaceBetween={30}
         slidesPerView={5}
         navigation={true}
@@ -79,7 +105,7 @@ const AgentView = () => {
             <SwiperSlide key={agent.id}>
               <div
                 onClick={() => setCurrentAgent(agent)}
-                className={`cursor-pointer relative w-36 rounded-sm border transition-all duration-300
+                className={`cursor-pointer relative w-36 rounded-sm border transition-all duration-300 m-2
                   ${isCurrentAgent ? 'border-[#f4cf67] scale-105' : 'border-transparent opacity-60 hover:opacity-90'}`}
               >
                 <img
