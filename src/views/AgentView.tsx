@@ -3,6 +3,7 @@ import { AgentType } from 'types';
 import { http } from 'utils/request';
 import { Navigation, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
 import { useParams } from 'react-router-dom';
 import { agentsNameMap } from 'common/const';
 
@@ -48,6 +49,11 @@ const AgentView = () => {
     setAgents((prev) => filterAgentsByType(prev));
   }, [type, filterAgentsByType]);
 
+  const handleSlideChange = (swiper: SwiperType) => {
+    const activeIndex = swiper.realIndex;
+    setCurrentAgent(agents[activeIndex]);
+  };
+
   if (isLoading)
     return <div className="h-[1000px] flex items-center justify-center">加载中...</div>;
   if (error)
@@ -89,7 +95,7 @@ const AgentView = () => {
         loading="eager"
       />
       <Swiper
-        className="w-8/12 absolute bottom-[-2rem]"
+        className="w-8/12 absolute bottom-[-8px] custom-swiper-navigation"
         spaceBetween={30}
         slidesPerView={5}
         navigation={true}
@@ -98,6 +104,7 @@ const AgentView = () => {
         grabCursor={true}
         pagination={{ clickable: true }}
         keyboard={{ enabled: true }}
+        onSlideChange={handleSlideChange}
       >
         {agents.map((agent) => {
           const isCurrentAgent = currentAgent.id === agent.id;

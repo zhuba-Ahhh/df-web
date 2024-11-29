@@ -115,3 +115,34 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.custom-swiper-navigation .swiper-button-prev {
+  // left: -10px; /* 左边按钮向外移动 */
+  // background: url(//game.gtimg.cn/images/dfm/cp/a20240906main/next.png) no-repeat center / 100%;
+  // width: 0.36rem;
+  // height: 0.66rem;
+  // transform: rotate(180deg);
+}
+
+.custom-swiper-navigation .swiper-button-next {
+  // right: -10px; /* 右边按钮向外移动 */
+  // background: url(//game.gtimg.cn/images/dfm/cp/a20240906main/next.png) no-repeat center / 100%;
+  // width: 0.36rem;
+  // height: 0.66rem;
+}
+
+.custom-swiper-navigation .swiper-button-next,
+.custom-swiper-navigation .swiper-button-prev {
+  color: #ffffff; /* 使用金色以匹配选中边框的颜色 */
+}
+
+.custom-swiper-navigation .swiper-button-next:hover,
+.custom-swiper-navigation .swiper-button-prev:hover {
+  color: #f4cf67; /* 悬停时变为白色 */
+}
+
+/* 如果导航按钮太大，可以调整大小 */
+.custom-swiper-navigation .swiper-button-next::after,
+.custom-swiper-navigation .swiper-button-prev::after {
+  font-size: 24px;
+}

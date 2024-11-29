@@ -5,12 +5,17 @@ import { ArmsView } from 'views/ArmsView';
 import { ProtectView } from 'views/ProtectView';
 import { AccView } from 'views/Acc';
 import { AgentView } from 'views/AgentView';
+import MapView from 'views/MapView';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      {
+        path: '/',
+        element: <AgentView />,
+      },
       {
         path: '/props/:type?',
         element: <PropsView />,
@@ -30,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: '/acc/:type?',
         element: <AccView />,
+      },
+      {
+        path: '/map',
+        element: <MapView />,
       },
     ],
   },

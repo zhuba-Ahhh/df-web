@@ -137,15 +137,22 @@ const items: MenuItem[] = [
       { key: 'making', label: '制造' },
     ],
   },
+  {
+    key: 'map',
+    label: '资源地图',
+    children: [{ key: 's1', label: '地图' }],
+  },
 ];
 
 const Menu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-  const pathnameArr = pathname.replace(/^\//, '').split('/');
+  const pathnameArr = pathname.trim().replace(/^\//, '').split('/');
   const [activeKey, setActiveKey] = useState(
-    pathnameArr.length > 0 ? pathnameArr[pathnameArr.length - 1] : 'agent'
+    pathnameArr.length > 0 && pathnameArr[pathnameArr.length - 1] !== ''
+      ? pathnameArr[pathnameArr.length - 1]
+      : 'agent'
   );
   const renderMenu = (items: MenuItem[]) => (
     <ul className="menu bg-base-200 p-0 [&_li>*]:rounded-none">
@@ -158,7 +165,7 @@ const Menu = () => {
           }}
         >
           <a className={`${activeKey === item.key ? 'active' : ''}`}>{item.label}</a>
-          {item.children && (
+          {item?.children && (
             <ul>
               {item.children.map(({ key, label, children }) => (
                 <li
