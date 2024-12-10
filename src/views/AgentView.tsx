@@ -95,7 +95,7 @@ const AgentView = () => {
         loading="eager"
       />
       <Swiper
-        className="w-8/12 absolute bottom-[-8px] custom-swiper-navigation"
+        className="w-8/12 relative bottom-[-8px] custom-swiper-navigation"
         spaceBetween={30}
         slidesPerView={5}
         navigation={true}
