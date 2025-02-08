@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from 'react';
+import { useEffect, useState, createContext, useCallback } from 'react';
 
 import NProgress from 'nprogress';
 import Loading from './components/Loading';
@@ -32,18 +32,18 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsMenuCollapsed((prev) => !prev);
-  };
+  }, []);
 
-  const fetchConfig = async () => {
+  const fetchConfig = useCallback(async () => {
     const res = await http.get<Omit<ContextType, 'isMenuCollapsed' | 'toggleMenu'>>('/config');
     setConfig({
       ...res,
       isMenuCollapsed,
       toggleMenu,
     });
-  };
+  }, [isMenuCollapsed, toggleMenu]);
 
   useEffect(() => {
     NProgress.start();
@@ -53,14 +53,14 @@ function App() {
     }, 1000);
 
     fetchConfig();
-  }, []);
+  }, [fetchConfig]);
 
   // 当折叠状态改变时更新 context
   useEffect(() => {
     if (config) {
       setConfig((prev) => (prev ? { ...prev, isMenuCollapsed } : null));
     }
-  }, [isMenuCollapsed]);
+  }, [isMenuCollapsed, setConfig, config]);
 
   return (
     <Context.Provider value={config}>
