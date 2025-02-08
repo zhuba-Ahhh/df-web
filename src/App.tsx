@@ -56,13 +56,6 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, [fetchConfig]);
 
-  // Update menu state in config
-  useEffect(() => {
-    if (config) {
-      setConfig((prev) => (prev ? { ...prev, isMenuCollapsed } : null));
-    }
-  }, [config, isMenuCollapsed]);
-
   return (
     <Context.Provider value={config}>
       <Navbar />
