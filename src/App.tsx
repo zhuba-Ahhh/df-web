@@ -35,7 +35,7 @@ function App() {
       isMenuCollapsed,
       toggleMenu,
     });
-  }, [toggleMenu]);
+  }, [isMenuCollapsed, toggleMenu]);
 
   // Initialize app and handle window resize
   useEffect(() => {
@@ -61,7 +61,7 @@ function App() {
     if (config) {
       setConfig((prev) => (prev ? { ...prev, isMenuCollapsed } : null));
     }
-  }, [isMenuCollapsed]);
+  }, [config, isMenuCollapsed]);
 
   return (
     <Context.Provider value={config}>
