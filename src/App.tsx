@@ -23,19 +23,11 @@ function App() {
   const [config, setConfig] = useState<ContextType | null>(null);
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(window.innerWidth < 768);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMenuCollapsed(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const toggleMenu = useCallback(() => {
     setIsMenuCollapsed((prev) => !prev);
   }, []);
 
+  // Combine the config fetching and menu state management
   const fetchConfig = useCallback(async () => {
     const res = await http.get<Omit<ContextType, 'isMenuCollapsed' | 'toggleMenu'>>('/config');
     setConfig({
@@ -43,24 +35,33 @@ function App() {
       isMenuCollapsed,
       toggleMenu,
     });
-  }, [isMenuCollapsed, toggleMenu]);
+  }, [toggleMenu]);
 
+  // Initialize app and handle window resize
   useEffect(() => {
     NProgress.start();
-    setTimeout(() => {
+
+    const handleResize = () => {
+      setIsMenuCollapsed(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Initial fetch
+    fetchConfig().finally(() => {
       setIsLoading(false);
       NProgress.done();
-    }, 1000);
+    });
 
-    fetchConfig();
+    return () => window.removeEventListener('resize', handleResize);
   }, [fetchConfig]);
 
-  // 当折叠状态改变时更新 context
+  // Update menu state in config
   useEffect(() => {
     if (config) {
       setConfig((prev) => (prev ? { ...prev, isMenuCollapsed } : null));
     }
-  }, [isMenuCollapsed, setConfig, config]);
+  }, [isMenuCollapsed]);
 
   return (
     <Context.Provider value={config}>

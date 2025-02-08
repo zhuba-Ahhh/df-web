@@ -1,5 +1,5 @@
 import { Context } from 'App';
-import { useEffect, useState, useCallback, useContext } from 'react';
+import { useEffect, useState, useCallback, useContext, useRef } from 'react';
 import { http, formatDuration } from 'utils';
 
 export interface Datum {
@@ -53,26 +53,63 @@ const fetchInfo = async (page?: string) => {
 };
 
 const InfoView = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<Datum[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const context = useContext(Context);
 
-  const fetchAccessories = useCallback(async () => {
+  const fetchAccessories = useCallback(async (currentPage: number) => {
     setLoading(true);
     try {
-      const res = await fetchInfo();
-      setData(res);
+      const res = await fetchInfo(currentPage.toString());
+      if (!res || res.length < 50) {
+        setHasMore(false);
+      } else {
+        setData((prev) => [...prev, ...res]);
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchAccessories();
+    fetchAccessories(1);
   }, [fetchAccessories]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (loading || !hasMore) return;
+
+      const { scrollHeight, scrollTop, clientHeight } = container;
+      const scrollBottom = scrollHeight - scrollTop - clientHeight;
+
+      if (scrollBottom < 100) {
+        setPage((prev) => prev + 1);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [loading, hasMore]);
+
+  // 监听页码变化，加载新数据
+  useEffect(() => {
+    if (page > 1) {
+      fetchAccessories(page);
+    }
+  }, [page, fetchAccessories]);
 
   const getStatusColor = (escapeFailReason: number) => {
     return escapeFailReason === 1 ? 'text-green-500' : 'text-red-500';
+  };
+
+  const getStatusColor1 = (flowCalGainedPrice: number) => {
+    return flowCalGainedPrice > 0 ? 'text-green-500' : 'text-red-500';
   };
 
   const getStatusText = (escapeFailReason: number) => {
@@ -111,7 +148,10 @@ const InfoView = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-4 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen">
+    <div
+      ref={containerRef}
+      className="flex flex-col space-y-4 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
+    >
       {data?.map((item, index) => (
         <div
           key={index}
@@ -126,15 +166,16 @@ const InfoView = () => {
               />
             </div>
             <div className="flex flex-col space-y-1.5 md:space-y-3">
-              <div className="flex flex-wrap items-center gap-2 md:gap-4">
+              <div className="text-xs md:text-base text-gray-400 flex items-center space-x-2 md:space-x-3 font-medium">
                 <span
-                  className={`text-xs md:text-base font-bold px-2 md:px-4 py-0.5 md:py-1.5 rounded-full ${getStatusColor(
+                  className={`${getStatusColor(
                     item.EscapeFailReason
                   )} bg-opacity-20 tracking-wider`}
                 >
                   {getStatusText(item.EscapeFailReason)}
                 </span>
-                <span className="text-xs md:text-base text-gray-100 font-semibold tracking-wide">
+                &nbsp;&nbsp;&nbsp;
+                <span className="text-gray-100 font-semibold tracking-wide">
                   {context?.agentName[item.ArmedForceId]}
                 </span>
               </div>
@@ -146,7 +187,7 @@ const InfoView = () => {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-auto">
+          <div className="flex flex-col space-y-2 w-full md:w-auto">
             <div className="text-gray-300 text-xs md:text-base space-y-0.5 md:space-y-1 md:text-right">
               <div className="flex items-center justify-between md:justify-end md:space-x-2">
                 <span className="text-gray-400">开始时间：</span>
@@ -174,7 +215,11 @@ const InfoView = () => {
               </div>
               <div className="flex flex-col items-center md:items-end">
                 <span className="text-gray-400 text-[10px] md:text-sm mb-0.5 md:mb-1">净收益</span>
-                <span className="text-base md:text-xl font-bold text-green-500 tracking-wider">
+                <span
+                  className={`text-base md:text-xl font-bold ${getStatusColor1(
+                    item.flowCalGainedPrice
+                  )} tracking-wider`}
+                >
                   {formatNumber(item.flowCalGainedPrice)}
                 </span>
               </div>
@@ -182,6 +227,16 @@ const InfoView = () => {
           </div>
         </div>
       ))}
+
+      {loading && (
+        <div className="flex justify-center py-4">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
+
+      {!hasMore && data.length > 0 && (
+        <div className="text-center text-gray-500 py-4">没有更多数据了</div>
+      )}
     </div>
   );
 };
