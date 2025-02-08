@@ -13,7 +13,7 @@
 
 ### 后端
 
-仓库：[https://github.com/zhuba-Ahhh/novel-api](https://github.com/zhuba-Ahhh/novel-api)
+仓库：[https://github.com/zhuba-Ahhh/df-api](https://github.com/zhuba-Ahhh/df-api)
 地址：[https://df-api.vercel.app](https://df-api.vercel.app)
 
 - nestJs

@@ -12,6 +12,8 @@ interface ContextType {
   mapName: Record<string, string>;
   agentImg: Record<number, string>;
   agentName: Record<number, string>;
+  isMenuCollapsed?: boolean;
+  toggleMenu?: () => void;
 }
 
 export const Context = createContext<ContextType | null>(null);
@@ -19,10 +21,30 @@ export const Context = createContext<ContextType | null>(null);
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [config, setConfig] = useState<ContextType | null>(null);
-  const fetchConfig = async () => {
-    const res = await http.get<ContextType>('/config');
-    setConfig(res);
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMenuCollapsed(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuCollapsed((prev) => !prev);
   };
+
+  const fetchConfig = async () => {
+    const res = await http.get<Omit<ContextType, 'isMenuCollapsed' | 'toggleMenu'>>('/config');
+    setConfig({
+      ...res,
+      isMenuCollapsed,
+      toggleMenu,
+    });
+  };
+
   useEffect(() => {
     NProgress.start();
     setTimeout(() => {
@@ -33,14 +55,29 @@ function App() {
     fetchConfig();
   }, []);
 
+  // 当折叠状态改变时更新 context
+  useEffect(() => {
+    if (config) {
+      setConfig((prev) => (prev ? { ...prev, isMenuCollapsed } : null));
+    }
+  }, [isMenuCollapsed]);
+
   return (
     <Context.Provider value={config}>
       <Navbar />
       <main className="container max-w-[100vw] pt-[64px] flex h-[100vh] overflow-y-hidden">
-        <div className="w-[160px] min-h-[100vh] overflow-y-auto">
+        <div
+          className={`transition-all duration-300 overflow-y-auto ${
+            isMenuCollapsed ? 'w-0' : 'w-[160px]'
+          } min-h-[100vh]`}
+        >
           <Menu />
         </div>
-        <div className="min-h-[calc(100vh - 64px)] w-[calc(100vw-160px)] overflow-y-auto">
+        <div
+          className={`min-h-[calc(100vh - 64px)] transition-all duration-300 overflow-y-auto ${
+            isMenuCollapsed ? 'w-[100vw]' : 'w-[calc(100vw-160px)]'
+          }`}
+        >
           {isLoading ? <Loading /> : <Outlet />}
         </div>
       </main>
