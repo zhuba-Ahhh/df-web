@@ -163,6 +163,7 @@ const InfoView = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
+    setPage(1);
     const res = await fetchInfo('1');
     setData(res);
     if (!res || res.length < 50) {
@@ -177,9 +178,9 @@ const InfoView = () => {
         ref={containerRef}
         className="flex flex-col space-y-4 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
       >
-        {data?.map((item, index) => (
+        {data?.map((item) => (
           <div
-            key={index}
+            key={item.dtEventTime}
             className="flex flex-col md:flex-row md:items-center justify-between bg-gray-800/80 backdrop-blur p-4 md:p-8 rounded-xl md:rounded-2xl shadow-lg hover:bg-gray-800/90 transition-all duration-300 border border-gray-700 space-y-4 md:space-y-0"
           >
             <div className="flex items-center space-x-3 md:space-x-8">
