@@ -16,6 +16,10 @@ const items: MenuItem[] = [
     children: agentsNameMap,
   },
   {
+    key: 'info',
+    label: '我的',
+  },
+  {
     key: 'props',
     label: '道具',
     children: [

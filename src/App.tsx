@@ -1,22 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
+
 import NProgress from 'nprogress';
 import Loading from './components/Loading';
 import Menu from 'components/Menu';
 import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar';
+import { http } from 'utils';
+
+// 添加 Context 类型定义
+interface ContextType {
+  mapName: Record<string, string>;
+  agentImg: Record<number, string>;
+  agentName: Record<number, string>;
+}
+
+export const Context = createContext<ContextType | null>(null);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [config, setConfig] = useState<ContextType | null>(null);
+  const fetchConfig = async () => {
+    const res = await http.get<ContextType>('/config');
+    setConfig(res);
+  };
   useEffect(() => {
     NProgress.start();
     setTimeout(() => {
       setIsLoading(false);
       NProgress.done();
     }, 1000);
+
+    fetchConfig();
   }, []);
 
   return (
-    <>
+    <Context.Provider value={config}>
       <Navbar />
       <main className="container max-w-[100vw] pt-[64px] flex h-[100vh] overflow-y-hidden">
         <div className="w-[160px] min-h-[100vh] overflow-y-auto">
@@ -26,7 +44,7 @@ function App() {
           {isLoading ? <Loading /> : <Outlet />}
         </div>
       </main>
-    </>
+    </Context.Provider>
   );
 }
 

@@ -20,7 +20,7 @@ const service: AxiosInstance = axios.create({
   baseURL:
     process.env.NODE_ENV === 'production'
       ? 'https://novel-api-psi.vercel.app'
-      : 'http://localhost:3101',
+      : 'http://localhost:3102',
   timeout: 0,
 });
 
