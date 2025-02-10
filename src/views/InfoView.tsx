@@ -1,10 +1,12 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
 import { fetchInfo, fetchSeason } from '../services/info';
 import { InfoCard } from '../components/InfoCard';
 import { CareerCard } from '../components/CareerCard';
 import type { Datum, JData } from '../types/info';
+import { Context } from 'App';
+import { ckOptions } from 'common/const';
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -38,9 +40,13 @@ const InfoView = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const context = useContext(Context);
+  const ck = context?.ck || ckOptions[0].value;
+  const seasonid = context?.seasonid || '3';
+
   const fetchCareerData = useCallback(async () => {
     try {
-      const res = await fetchSeason('3');
+      const res = await fetchSeason(seasonid, ck);
       // 确保 res 不为空数组时才更新状态
       if (res) {
         setCareerData(res);
@@ -48,20 +54,23 @@ const InfoView = () => {
     } catch (error) {
       console.error('Failed to fetch career data:', error);
     }
-  }, []);
+  }, [ck, seasonid]);
 
-  const fetchAccessories = useCallback(async (currentPage: number) => {
-    setLoading(currentPage === 1);
-    try {
-      const res = await fetchInfo(currentPage.toString());
-      setData((prev) => (currentPage === 1 ? res : [...prev, ...res]));
-      if (!res || res.length < 50) {
-        setHasMore(false);
+  const fetchAccessories = useCallback(
+    async (currentPage: number) => {
+      setLoading(currentPage === 1);
+      try {
+        const res = await fetchInfo(currentPage.toString(), ck);
+        setData((prev) => (currentPage === 1 ? res : [...prev, ...res]));
+        if (!res || res.length < 50) {
+          setHasMore(false);
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [ck]
+  );
 
   useEffect(() => {
     fetchCareerData();

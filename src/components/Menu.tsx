@@ -11,13 +11,13 @@ type MenuItem = {
 
 const items: MenuItem[] = [
   {
+    key: 'info',
+    label: '我的',
+  },
+  {
     key: 'agent',
     label: '干员',
     children: agentsNameMap,
-  },
-  {
-    key: 'info',
-    label: '我的',
   },
   {
     key: 'props',

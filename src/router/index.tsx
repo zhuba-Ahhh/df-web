@@ -7,6 +7,7 @@ import { AccView } from 'views/Acc';
 import { AgentView } from 'views/AgentView';
 import { InfoView } from 'views/InfoView';
 import MapView from 'views/MapView';
+import { SettingView } from 'views/SettingView';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <AgentView />,
+        element: <InfoView />,
       },
       {
         path: '/info',
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: '/map',
         element: <MapView />,
+      },
+      {
+        path: '/setting',
+        element: <SettingView />,
       },
     ],
   },

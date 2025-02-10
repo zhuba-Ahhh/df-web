@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Image } from 'antd';
 import { MapIcon } from 'assets/svg/MapIcon';
+import { SettingIcon } from 'assets/svg/SettingIcon';
 import { useContext } from 'react';
 import { Context } from 'App';
 import { MenuFoldIcon } from './icons/MenuFoldIcon';
@@ -31,6 +32,9 @@ const Navbar = () => {
       <li>
         <Link to="/map" className="text-2xl font-bold">
           <MapIcon />
+        </Link>
+        <Link to="/setting" className="text-2xl font-bold ml-4">
+          <SettingIcon />
         </Link>
       </li>
     </ul>

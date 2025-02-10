@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import type { JData } from '../types/info';
 import { Context } from 'App';
 import { fetchAssets } from 'services/info';
+import { seasonOptions } from 'common/const';
 
 interface CareerCardProps {
   data?: JData;
@@ -10,6 +11,8 @@ interface CareerCardProps {
 export const CareerCard = ({ data }: CareerCardProps) => {
   const context = useContext(Context);
   const [assets, setAssets] = useState<[string, string, string]>();
+
+  const season = seasonOptions.find((item) => item.value === context?.seasonid)?.label;
 
   useEffect(() => {
     const getAssets = async () => {
@@ -25,7 +28,7 @@ export const CareerCard = ({ data }: CareerCardProps) => {
     getAssets();
   }, []);
 
-  if (!data) return null;
+  if (!data || !data?.careerData || !data?.userData) return null;
 
   const { careerData, userData } = data;
 
@@ -55,18 +58,18 @@ export const CareerCard = ({ data }: CareerCardProps) => {
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 overflow-hidden bg-gray-700">
             <img
-              src={`https://playerhub.df.qq.com/playerhub/60004/object/${userData.picurl}.png`}
-              alt={userData.charac_name}
+              src={`https://playerhub.df.qq.com/playerhub/60004/object/${userData?.picurl}.png`}
+              alt={userData?.charac_name}
               className="w-full h-full"
             />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">
-              {decodeURIComponent(userData.charac_name)}
+              {decodeURIComponent(userData?.charac_name)}
             </h2>
             <p className="text-gray-400">
-              {context?.seasonOptions[0]} &nbsp;
-              {getRank(careerData.rankpoint)} ({careerData.rankpoint})
+              {season}赛季 &nbsp;
+              {getRank(careerData?.rankpoint)} ({careerData?.rankpoint})
             </p>
             {/* 资产展示 */}
             {assets && (

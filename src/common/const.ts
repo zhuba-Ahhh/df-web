@@ -14,4 +14,25 @@ const agentsNameMap = [
   { key: 'scout', label: '侦察' },
 ];
 
-export { colors, agentsNameMap };
+const seasonOptions = [
+  { label: '焰火', value: '3' },
+  { label: '聚变', value: '2' },
+  { label: '起源', value: '1' },
+];
+
+const ckOptions = [
+  {
+    label: '浩然白帝郑居中',
+    value:
+      'uin=o3477826311; RK=b59FxoIHym; ptcz=3777785d342a528eddf82ba651955ccb98caacf6f435c3c384528525cd0c6484; pgv_pvid=7196508015; eas_sid=21A7g2d2Y5t0Q447b1g8X9L8K3; lplqqcomrouteLine=a20240115lpl_a20240115lpl_a20240115lpl; rv2=80502F3A38E6C3F70F730D59DE0147F331CC33FFFFC02123C4; property20=946F9D3A1B6588D45437A57AC4230CFBE51F1C96D894E540A3D998831349302B87A833D7E96FCEEB; dfqqcomrouteLine=a20240729directory_index_a20240729directory_index_a20240729directory_index_pc; ied_qq=o3477826311; pgv_info=ssid; skey=@JBz9L47JS; iegams_milo_proxylogin_qc=101491592_%24%24_6299DAAC80EA915F34FDA0BE5A6B2635_%24%24_514422781D6FF22FFD04013B58741788; refresh_token=; expires_time=; acctype=qc; openid=6299DAAC80EA915F34FDA0BE5A6B2635; access_token=514422781D6FF22FFD04013B58741788; appid=101491592; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=',
+  },
+  {
+    label: 'Tobyouter',
+    value:
+      'RK=9w8FxIIX2G; ptcz=050c7946542badbda08f59980d64b1d75401c43b5fba9a7c33585f31976b74f0; iip=0; _qimei_uuid42=1850f171c29100a6a3958363cfd2d0d375b2ae1c6c; _qimei_h38=d896c076a3958363cfd2d0d30300000821850f; eas_sid=m1I7C2h2X3V4A0P772u57021t2; qq_domain_video_guid_verify=28a610049503a5c3; pgv_pvid=2160375143; _qimei_q36=; pac_uid=0_Rn5QhEYkmEnWJ; _qimei_fingerprint=2257a00fd2b9311f5ea7450c12d4d991; suid=user_0_Rn5QhEYkmEnWJ; pgv_info=ssid=s6243878912; iegams_milo_proxylogin_qc=101491592_%24%24_BE41C0491EE5F17E6DA94A72C79ADB8E_%24%24_6A9C431C4DD5F489493AFFE1EAB466DC; dfqqcomrouteLine=record202410ver_record202410ver; acctype=qc; openid=BE41C0491EE5F17E6DA94A72C79ADB8E; access_token=6A9C431C4DD5F489493AFFE1EAB466DC; appid=101491592; refresh_token=; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=; expires_time=',
+  },
+  { label: '铁板红烧鱿鱼', value: '铁板红烧鱿鱼' },
+  { label: '自定义', value: 'custom' },
+];
+
+export { colors, agentsNameMap, seasonOptions, ckOptions };

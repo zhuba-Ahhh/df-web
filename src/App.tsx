@@ -6,6 +6,7 @@ import Menu from 'components/Menu';
 import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar';
 import { http } from 'utils';
+import { ckOptions } from 'common/const';
 
 // 添加 Context 类型定义
 interface ContextType {
@@ -15,15 +16,24 @@ interface ContextType {
   isMenuCollapsed?: boolean;
   rank: Record<number, string>;
   seasonOptions: string[];
+  ck: string;
+  seasonid: string;
   toggleMenu?: () => void;
+  updateConfig?: (partialConfig: Partial<ContextType>) => void;
 }
+const ck = localStorage.getItem('ck') || ckOptions[0].value;
+const seasonid = localStorage.getItem('seasonid') || '3';
 
 export const Context = createContext<ContextType | null>(null);
 
-function App() {
+const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [config, setConfig] = useState<ContextType | null>(null);
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(window.innerWidth < 768);
+
+  const updateConfig = useCallback((partialConfig: Partial<ContextType>) => {
+    setConfig((prevConfig) => (prevConfig ? { ...prevConfig, ...partialConfig } : null));
+  }, []);
 
   const toggleMenu = useCallback(() => {
     setIsMenuCollapsed((prev) => !prev);
@@ -36,8 +46,11 @@ function App() {
       ...res,
       isMenuCollapsed,
       toggleMenu,
+      ck,
+      seasonid,
+      updateConfig,
     });
-  }, [isMenuCollapsed, toggleMenu]);
+  }, [isMenuCollapsed, toggleMenu, updateConfig]);
 
   // Initialize app and handle window resize
   useEffect(() => {
@@ -79,6 +92,6 @@ function App() {
       </main>
     </Context.Provider>
   );
-}
+};
 
 export default App;
