@@ -16,7 +16,8 @@ const SettingView = () => {
     } catch (error) {
       console.error('保存配置失败:', error);
     }
-  }, [ck, context, customCk, seasonid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ck, customCk, seasonid]);
 
   const isCustom = useMemo(() => ck === 'custom', [ck]);
 
