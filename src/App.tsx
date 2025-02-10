@@ -13,6 +13,8 @@ interface ContextType {
   agentImg: Record<number, string>;
   agentName: Record<number, string>;
   isMenuCollapsed?: boolean;
+  rank: Record<number, string>;
+  seasonOptions: string[];
   toggleMenu?: () => void;
 }
 
