@@ -32,7 +32,7 @@ export interface TeammateArr {
   KillPlayerAICount: number;
   MapId: string;
   nickName: string;
-  Rescue: number;
+  Rescue: number; // 救助/复活
   TeamId: string;
   vopenid: boolean;
 }

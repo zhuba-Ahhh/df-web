@@ -1,24 +1,18 @@
 import { Context } from 'App';
 import { useContext } from 'react';
-import { formatDateTime, formatNumber } from '../utils/format';
+import {
+  formatDateTime,
+  formatNumber,
+  getStatusColor,
+  getStatusColor1,
+  getStatusText,
+} from '../utils/format';
 import { formatDuration } from 'utils';
 import type { Datum } from '../types/info';
 
 interface InfoCardProps {
   item: Datum;
 }
-
-const getStatusColor = (escapeFailReason: number) => {
-  return escapeFailReason === 1 ? 'text-green-500' : 'text-red-500';
-};
-
-const getStatusColor1 = (flowCalGainedPrice: number) => {
-  return flowCalGainedPrice > 0 ? 'text-green-500' : 'text-red-500';
-};
-
-const getStatusText = (escapeFailReason: number) => {
-  return escapeFailReason === 1 ? '撤离成功' : '撤离失败';
-};
 
 export const InfoCard = ({ item }: InfoCardProps) => {
   const context = useContext(Context);

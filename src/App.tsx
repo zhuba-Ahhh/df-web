@@ -7,6 +7,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar';
 import { http } from 'utils';
 import { ckOptions } from 'common/const';
+import { TeammateArr } from 'types/info';
 
 // 添加 Context 类型定义
 interface ContextType {
@@ -18,6 +19,7 @@ interface ContextType {
   seasonOptions: string[];
   ck: string;
   seasonid: string;
+  teammateArr?: TeammateArr[];
   toggleMenu?: () => void;
   updateConfig?: (partialConfig: Partial<ContextType>) => void;
 }

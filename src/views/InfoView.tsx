@@ -4,7 +4,8 @@ import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
 import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
 import { InfoCard } from '../components/InfoCard';
 import { CareerCard } from '../components/CareerCard';
-import type { Datum, JData } from '../types/info';
+import { useNavigate } from 'react-router-dom';
+import type { Datum, JData, TeammateArr } from '../types/info';
 import { Context } from 'App';
 import { ckOptions } from 'common/const';
 
@@ -29,6 +30,7 @@ const renderText = (pullStatus: PullStatus, percent: number) => {
 };
 
 const InfoView = () => {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { ref: InViewRef, inView } = useInView();
 
@@ -73,7 +75,11 @@ const InfoView = () => {
       setLoading(currentPage === 1);
       try {
         const res = await fetchInfo(currentPage.toString(), ck);
-        setData((prev) => (currentPage === 1 ? res : [...prev, ...res]));
+        setData((prev) => {
+          const newData = currentPage === 1 ? res : [...prev, ...res];
+
+          return newData;
+        });
         if (!res || res.length < 50) {
           setHasMore(false);
         }
@@ -121,6 +127,11 @@ const InfoView = () => {
     setRefreshing(false);
   };
 
+  const handleCardClick = (newData: TeammateArr[]) => {
+    context?.updateConfig?.({ teammateArr: newData });
+    navigate(`/match`);
+  };
+
   return (
     <PullToRefreshify refreshing={refreshing} onRefresh={handleRefresh} renderText={renderText}>
       <div
@@ -129,7 +140,15 @@ const InfoView = () => {
       >
         {careerData && <CareerCard data={careerData} assets={assets} />}
 
-        {data?.map((item, index) => <InfoCard key={item.dtEventTime + index} item={item} />)}
+        {data?.map((item, index) => (
+          <div
+            key={item.dtEventTime + index}
+            onClick={() => handleCardClick(item.teammateArr)}
+            className="cursor-pointer"
+          >
+            <InfoCard item={item} />
+          </div>
+        ))}
 
         {inView && hasMore && (
           <div className="flex justify-center pt-4">

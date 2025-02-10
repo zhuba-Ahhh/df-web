@@ -8,6 +8,7 @@ import { AgentView } from 'views/AgentView';
 import { InfoView } from 'views/InfoView';
 import MapView from 'views/MapView';
 import { SettingView } from 'views/SettingView';
+import { MatchDetailView } from 'views/MatchDetailView';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: '/info',
         element: <InfoView />,
+      },
+      {
+        path: '/match',
+        element: <MatchDetailView />,
       },
       {
         path: '/props/:type?',

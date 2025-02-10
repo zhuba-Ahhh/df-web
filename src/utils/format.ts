@@ -13,3 +13,22 @@ export const formatDateTime = (dateStr: string) => {
 export const formatNumber = (num: string | number) => {
   return Number(num).toLocaleString('zh-CN');
 };
+
+export const formatDuration = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}分${remainingSeconds}秒`;
+};
+
+
+export const getStatusText = (escapeFailReason: number) => {
+  return escapeFailReason === 1 ? '撤离成功' : '撤离失败';
+};
+
+export const getStatusColor = (escapeFailReason: number) => {
+  return escapeFailReason === 1 ? 'text-green-500' : 'text-red-500';
+};
+
+export const getStatusColor1 = (flowCalGainedPrice: number) => {
+  return flowCalGainedPrice > 0 ? 'text-green-500' : 'text-red-500';
+};
