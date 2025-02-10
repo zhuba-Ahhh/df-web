@@ -1,32 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import type { JData } from '../types/info';
 import { Context } from 'App';
-import { fetchAssets } from 'services/info';
 import { seasonOptions } from 'common/const';
 
 interface CareerCardProps {
   data?: JData;
+  assets?: [string, string, string];
 }
 
-export const CareerCard = ({ data }: CareerCardProps) => {
+export const CareerCard = ({ data, assets }: CareerCardProps) => {
   const context = useContext(Context);
-  const [assets, setAssets] = useState<[string, string, string]>();
-
   const season = seasonOptions.find((item) => item.value === context?.seasonid)?.label;
-
-  useEffect(() => {
-    const getAssets = async () => {
-      try {
-        const res = await fetchAssets();
-        if (res) {
-          setAssets(res);
-        }
-      } catch (error) {
-        console.error('Failed to fetch assets:', error);
-      }
-    };
-    getAssets();
-  }, []);
 
   if (!data || !data?.careerData || !data?.userData) return null;
 

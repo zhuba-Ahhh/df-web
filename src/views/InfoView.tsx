@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
-import { fetchInfo, fetchSeason } from '../services/info';
+import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
 import { InfoCard } from '../components/InfoCard';
 import { CareerCard } from '../components/CareerCard';
 import type { Datum, JData } from '../types/info';
@@ -34,6 +34,7 @@ const InfoView = () => {
 
   const [data, setData] = useState<Datum[]>([]);
   const [careerData, setCareerData] = useState<JData>();
+  const [assets, setAssets] = useState<[string, string, string]>();
   const [refreshing, setRefreshing] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,17 @@ const InfoView = () => {
   const context = useContext(Context);
   const ck = context?.ck || ckOptions[0].value;
   const seasonid = context?.seasonid || '3';
+
+  const fetchAssetData = useCallback(async () => {
+    try {
+      const res = await fetchAssets(ck);
+      if (res) {
+        setAssets(res);
+      }
+    } catch (error) {
+      console.error('Failed to fetch assets:', error);
+    }
+  }, [ck]);
 
   const fetchCareerData = useCallback(async () => {
     try {
@@ -74,6 +86,7 @@ const InfoView = () => {
 
   useEffect(() => {
     fetchCareerData();
+    fetchAssetData();
     fetchAccessories(1);
   }, [fetchCareerData, fetchAccessories]);
 
@@ -104,7 +117,7 @@ const InfoView = () => {
   const handleRefresh = async () => {
     setRefreshing(true);
     setPage(1);
-    await Promise.all([fetchCareerData(), fetchAccessories(1)]);
+    await Promise.all([fetchCareerData(), fetchAccessories(1), fetchAssetData()]);
     setRefreshing(false);
   };
 
@@ -114,7 +127,7 @@ const InfoView = () => {
         ref={containerRef}
         className="flex flex-col space-y-4 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
       >
-        {careerData && <CareerCard data={careerData} />}
+        {careerData && <CareerCard data={careerData} assets={assets} />}
 
         {data?.map((item, index) => <InfoCard key={item.dtEventTime + index} item={item} />)}
 
