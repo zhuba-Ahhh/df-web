@@ -107,29 +107,29 @@ export const CareerCard = ({ data }: CareerCardProps) => {
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4 mt-6">
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">对局数</p>
-          <p className="text-xl font-bold text-white">{careerData.soltotalfght}</p>
+          <p className="text-base font-bold text-white">{careerData.soltotalfght}</p>
         </div>
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">成功撤离</p>
-          <p className="text-xl font-bold text-green-500">{careerData.solttotalescape}</p>
+          <p className="text-base font-bold text-green-500">{careerData.solttotalescape}</p>
         </div>
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">游戏时长</p>
-          <p className="text-xl font-bold text-green-500">
+          <p className="text-base font-bold text-green-500">
             {formatDuration(careerData.solduration)}
           </p>
         </div>
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">撤离率</p>
-          <p className="text-xl font-bold text-green-500">{careerData.solescaperatio}</p>
+          <p className="text-base font-bold text-green-500">{careerData.solescaperatio}</p>
         </div>
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">击败干员</p>
-          <p className="text-xl font-bold text-yellow-500">{careerData.soltotalkill}</p>
+          <p className="text-base font-bold text-yellow-500">{careerData.soltotalkill}</p>
         </div>
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">KD</p>
-          <p className="text-xl font-bold text-blue-500">
+          <p className="text-base font-bold text-blue-500">
             {(Number(careerData.soltotalkill) / Number(careerData.soltotalfght)).toFixed(2)}
           </p>
         </div>
