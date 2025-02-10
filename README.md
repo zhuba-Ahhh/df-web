@@ -18,3 +18,9 @@
 
 - nestJs
 - Vercel 部署
+
+### 预览
+
+![1](./rd1.png)
+
+![2](./rd2.png)

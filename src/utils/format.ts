@@ -20,7 +20,6 @@ export const formatDuration = (seconds: number) => {
   return `${minutes}分${remainingSeconds}秒`;
 };
 
-
 export const getStatusText = (escapeFailReason: number) => {
   return escapeFailReason === 1 ? '撤离成功' : '撤离失败';
 };
