@@ -88,7 +88,7 @@ const InfoView = () => {
     fetchCareerData();
     fetchAssetData();
     fetchAccessories(1);
-  }, [fetchCareerData, fetchAccessories]);
+  }, [fetchCareerData, fetchAccessories, fetchAssetData]);
 
   // 监听页码变化，加载新数据
   useEffect(() => {
