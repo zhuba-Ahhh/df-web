@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useCallback, useRef, useContext, useMemo } from 'react';
+import { useRef, useContext, useState, useMemo, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
-import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
 import { InfoCard } from '../components/InfoCard';
 import { CareerCard } from '../components/CareerCard';
 import { useNavigate } from 'react-router-dom';
-import type { Datum, JData, TeammateArr } from '../types/info';
+import type { TeammateArr } from '../types/info';
 import { Context } from 'App';
-import { ckOptions, seasonOptions } from 'common/const';
+import { useInfoData } from '../hooks/useInfoData';
+import { InfoFilters } from '../components/InfoFilters';
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -34,31 +33,24 @@ const InfoView = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { ref: InViewRef, inView } = useInView();
-
-  const [data, setData] = useState<Datum[]>([]);
-  const [careerData, setCareerData] = useState<JData>();
-  const [assets, setAssets] = useState<[string, string, string]>();
+  const context = useContext(Context);
+  const [selectedMap, setSelectedMap] = useState<string>('all');
   const [refreshing, setRefreshing] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-  const [isFetchList, setIsFetchList] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
-
-  const [selectedMap, setSelectedMap] = useState<string>('all');
-  const context = useContext(Context);
-  const [seasonid, setSeasonid] = useState(context?.seasonid || '3');
-  const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
-
-  const mapOptions = [
-    { value: 'all', label: '全部地图' },
-    ...Object.entries(context?.mapName || {})
-      .map(([value, label]) => ({
-        value,
-        label,
-      }))
-      .filter((item) => Number(item.value) > 1000),
-  ];
+  const {
+    data,
+    careerData,
+    assets,
+    loading,
+    isFetchList,
+    hasMore,
+    setPage,
+    seasonid,
+    ck,
+    changeCk,
+    changeSeasonId,
+    refresh,
+  } = useInfoData();
 
   const filteredData = useMemo(() => {
     return data.filter((item) => {
@@ -67,93 +59,12 @@ const InfoView = () => {
     });
   }, [data, selectedMap]);
 
-  const fetchAssetData = useCallback(
-    async (newCk?: string) => {
-      try {
-        const res = await fetchAssets(newCk || ck);
-        if (res) {
-          setAssets(res);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Failed to fetch assets:', error);
-      }
-    },
-    [ck]
-  );
-
-  const fetchCareerData = useCallback(
-    async (seasonid?: string, newCk?: string) => {
-      try {
-        const res = await fetchSeason(seasonid, newCk || ck);
-        // 确保 res 不为空数组时才更新状态
-        if (res) {
-          setCareerData(res);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Failed to fetch career data:', error);
-      }
-    },
-    [ck]
-  );
-
-  const fetchAccessories = useCallback(
-    async (currentPage: number, newCk?: string) => {
-      setLoading(currentPage === 1);
-      setIsFetchList(true);
-      try {
-        const res = await fetchInfo(currentPage.toString(), newCk || ck);
-        setData((prev) => {
-          const newData = currentPage === 1 ? res : [...prev, ...res];
-          return newData;
-        });
-        if (!res || res.length < 50) {
-          setHasMore(false);
-        }
-      } finally {
-        setLoading(false);
-        setIsFetchList(false);
-      }
-    },
-    [ck]
-  );
-
-  useEffect(() => {
-    fetchCareerData('3');
-    fetchAssetData();
-    fetchAccessories(1);
-  }, []);
-
-  // 监听页码变化，加载新数据
-  useEffect(() => {
-    if (page > 1) {
-      fetchAccessories(page);
-    }
-  }, [page, fetchAccessories]);
-
+  // 监听无限滚动
   useEffect(() => {
     if (inView && !isFetchList) {
       setPage((prev) => prev + 1);
     }
-  }, [inView]);
-
-  const changeCk = useCallback(
-    (newCk: string) => {
-      localStorage.setItem('ck', newCk);
-      context?.updateConfig?.({ ck: newCk });
-      setCk(newCk);
-      setData([]);
-      setPage(1);
-      setHasMore(true);
-      Promise.all([
-        fetchCareerData(seasonid, newCk),
-        fetchAccessories(1, newCk),
-        fetchAssetData(newCk),
-      ]);
-    },
-    [seasonid, fetchCareerData, fetchAccessories, fetchAssetData]
-  );
+  }, [inView, isFetchList, setPage]);
 
   if (loading) {
     return (
@@ -168,8 +79,7 @@ const InfoView = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    setPage(1);
-    await Promise.all([fetchCareerData(), fetchAccessories(1), fetchAssetData()]);
+    await refresh();
     setRefreshing(false);
   };
 
@@ -184,61 +94,14 @@ const InfoView = () => {
         ref={containerRef}
         className="flex flex-col space-y-2 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
       >
-        <div className="flex items-center space-x-2 mb-2">
-          {mapOptions && (
-            <select
-              value={selectedMap}
-              onChange={(e) => {
-                setSelectedMap(e.target.value);
-              }}
-              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
-            >
-              {mapOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          )}
-          {seasonOptions && (
-            <select
-              value={seasonid}
-              onChange={(e) => {
-                const newSeasonId = e.target.value;
-                localStorage.setItem('seasonid', newSeasonId);
-                context?.updateConfig?.({ seasonid: newSeasonId });
-                setSeasonid(newSeasonId);
-                fetchCareerData(newSeasonId);
-              }}
-              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
-            >
-              {seasonOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          )}
-          {ckOptions && (
-            <select
-              value={ck}
-              onChange={(e) => {
-                const newCk = e.target.value;
-
-                changeCk(newCk);
-              }}
-              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
-            >
-              {ckOptions
-                ?.filter((item) => item.value !== 'custom')
-                .map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-            </select>
-          )}
-        </div>
+        <InfoFilters
+          selectedMap={selectedMap}
+          setSelectedMap={setSelectedMap}
+          seasonid={seasonid}
+          changeSeasonId={changeSeasonId}
+          ck={ck}
+          changeCk={changeCk}
+        />
 
         {careerData && <CareerCard data={careerData} assets={assets} />}
 
