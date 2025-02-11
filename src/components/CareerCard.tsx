@@ -8,6 +8,22 @@ interface CareerCardProps {
   assets?: [string, string, string];
 }
 
+const formatDuration = (seconds: string) => {
+  const totalMinutes = Math.floor(Number(seconds) / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}h${minutes}m`;
+};
+
+const getPictureUrl = (picurl: string) => {
+  // 判断是否可以转换成数字
+  if (!Number.isNaN(Number(picurl))) {
+    return `https://playerhub.df.qq.com/playerhub/60004/object/${picurl}.png`;
+  } else {
+    return decodeURIComponent(picurl);
+  }
+};
+
 export const CareerCard = ({ data, assets }: CareerCardProps) => {
   const context = useContext(Context);
   const season = seasonOptions.find((item) => item.value === context?.seasonid)?.label;
@@ -27,22 +43,6 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
       }
     }
     return rankMap['6000'] || '未知段位';
-  };
-
-  const formatDuration = (seconds: string) => {
-    const totalMinutes = Math.floor(Number(seconds) / 60);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${hours}h${minutes}m`;
-  };
-
-  const getPictureUrl = (picurl: string) => {
-    // 判断是否可以转换成数字
-    if (!Number.isNaN(Number(picurl))) {
-      return `https://playerhub.df.qq.com/playerhub/60004/object/${userData?.picurl}.png`;
-    } else {
-      return decodeURIComponent(picurl);
-    }
   };
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
@@ -40,6 +41,7 @@ const InfoView = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [isFetchList, setIsFetchList] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -75,11 +77,11 @@ const InfoView = () => {
   const fetchAccessories = useCallback(
     async (currentPage: number) => {
       setLoading(currentPage === 1);
+      setIsFetchList(true);
       try {
         const res = await fetchInfo(currentPage.toString(), ck);
         setData((prev) => {
           const newData = currentPage === 1 ? res : [...prev, ...res];
-
           return newData;
         });
         if (!res || res.length < 50) {
@@ -87,6 +89,7 @@ const InfoView = () => {
         }
       } finally {
         setLoading(false);
+        setIsFetchList(false);
       }
     },
     [ck]
@@ -106,7 +109,7 @@ const InfoView = () => {
   }, [page, fetchAccessories]);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isFetchList) {
       setPage((prev) => prev + 1);
     }
   }, [inView]);

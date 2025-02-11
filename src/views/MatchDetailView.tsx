@@ -1,6 +1,12 @@
 import { useContext } from 'react';
 import { Context } from 'App';
-import { formatDateTime, formatDuration, getStatusColor, getStatusText } from 'utils/format';
+import {
+  formatDateTime,
+  formatDuration,
+  formatNumber,
+  getStatusColor,
+  getStatusText,
+} from 'utils/format';
 
 const MatchDetailView = () => {
   const context = useContext(Context);
@@ -75,7 +81,7 @@ const MatchDetailView = () => {
                 </div>
                 <div>
                   <p className="text-gray-400">收益</p>
-                  <p className="font-medium text-yellow-500">{teammate.FinalPrice}</p>
+                  <p className="font-medium text-yellow-500">{formatNumber(teammate.FinalPrice)}</p>
                 </div>
               </div>
             ))}
