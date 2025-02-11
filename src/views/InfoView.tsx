@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useCallback, useRef, useContext } from 'react';
+import { useEffect, useState, useCallback, useRef, useContext, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
 import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
@@ -8,7 +8,7 @@ import { CareerCard } from '../components/CareerCard';
 import { useNavigate } from 'react-router-dom';
 import type { Datum, JData, TeammateArr } from '../types/info';
 import { Context } from 'App';
-import { ckOptions } from 'common/const';
+import { ckOptions, seasonOptions } from 'common/const';
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -45,41 +45,65 @@ const InfoView = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const [selectedMap, setSelectedMap] = useState<string>('all');
   const context = useContext(Context);
-  const ck = context?.ck || ckOptions[0].value;
-  const seasonid = context?.seasonid || '3';
+  const [seasonid, setSeasonid] = useState(context?.seasonid || '3');
+  const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
 
-  const fetchAssetData = useCallback(async () => {
-    try {
-      const res = await fetchAssets(ck);
-      if (res) {
-        setAssets(res);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error('Failed to fetch assets:', error);
-    }
-  }, [ck]);
+  const mapOptions = [
+    { value: 'all', label: '全部地图' },
+    ...Object.entries(context?.mapName || {})
+      .map(([value, label]) => ({
+        value,
+        label,
+      }))
+      .filter((item) => Number(item.value) > 1000),
+  ];
 
-  const fetchCareerData = useCallback(async () => {
-    try {
-      const res = await fetchSeason(seasonid, ck);
-      // 确保 res 不为空数组时才更新状态
-      if (res) {
-        setCareerData(res);
-        setLoading(false);
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      if (selectedMap === 'all') return true;
+      return item.MapId === selectedMap;
+    });
+  }, [data, selectedMap]);
+
+  const fetchAssetData = useCallback(
+    async (newCk?: string) => {
+      try {
+        const res = await fetchAssets(newCk || ck);
+        if (res) {
+          setAssets(res);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Failed to fetch assets:', error);
       }
-    } catch (error) {
-      console.error('Failed to fetch career data:', error);
-    }
-  }, [ck, seasonid]);
+    },
+    [ck]
+  );
+
+  const fetchCareerData = useCallback(
+    async (seasonid?: string, newCk?: string) => {
+      try {
+        const res = await fetchSeason(seasonid, newCk || ck);
+        // 确保 res 不为空数组时才更新状态
+        if (res) {
+          setCareerData(res);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Failed to fetch career data:', error);
+      }
+    },
+    [ck]
+  );
 
   const fetchAccessories = useCallback(
-    async (currentPage: number) => {
+    async (currentPage: number, newCk?: string) => {
       setLoading(currentPage === 1);
       setIsFetchList(true);
       try {
-        const res = await fetchInfo(currentPage.toString(), ck);
+        const res = await fetchInfo(currentPage.toString(), newCk || ck);
         setData((prev) => {
           const newData = currentPage === 1 ? res : [...prev, ...res];
           return newData;
@@ -96,10 +120,10 @@ const InfoView = () => {
   );
 
   useEffect(() => {
-    fetchCareerData();
+    fetchCareerData('3');
     fetchAssetData();
     fetchAccessories(1);
-  }, [fetchCareerData, fetchAccessories, fetchAssetData]);
+  }, []);
 
   // 监听页码变化，加载新数据
   useEffect(() => {
@@ -113,6 +137,23 @@ const InfoView = () => {
       setPage((prev) => prev + 1);
     }
   }, [inView]);
+
+  const changeCk = useCallback(
+    (newCk: string) => {
+      localStorage.setItem('ck', newCk);
+      context?.updateConfig?.({ ck: newCk });
+      setCk(newCk);
+      setData([]);
+      setPage(1);
+      setHasMore(true);
+      Promise.all([
+        fetchCareerData(seasonid, newCk),
+        fetchAccessories(1, newCk),
+        fetchAssetData(newCk),
+      ]);
+    },
+    [seasonid, fetchCareerData, fetchAccessories, fetchAssetData]
+  );
 
   if (loading) {
     return (
@@ -141,15 +182,71 @@ const InfoView = () => {
     <PullToRefreshify refreshing={refreshing} onRefresh={handleRefresh} renderText={renderText}>
       <div
         ref={containerRef}
-        className="flex flex-col space-y-4 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
+        className="flex flex-col space-y-2 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
       >
+        <div className="flex items-center space-x-2 mb-2">
+          {mapOptions && (
+            <select
+              value={selectedMap}
+              onChange={(e) => {
+                setSelectedMap(e.target.value);
+              }}
+              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
+            >
+              {mapOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          )}
+          {seasonOptions && (
+            <select
+              value={seasonid}
+              onChange={(e) => {
+                const newSeasonId = e.target.value;
+                localStorage.setItem('seasonid', newSeasonId);
+                context?.updateConfig?.({ seasonid: newSeasonId });
+                setSeasonid(newSeasonId);
+                fetchCareerData(newSeasonId);
+              }}
+              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
+            >
+              {seasonOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          )}
+          {ckOptions && (
+            <select
+              value={ck}
+              onChange={(e) => {
+                const newCk = e.target.value;
+
+                changeCk(newCk);
+              }}
+              className="bg-gray-800 text-white px-2 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
+            >
+              {ckOptions
+                ?.filter((item) => item.value !== 'custom')
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </select>
+          )}
+        </div>
+
         {careerData && <CareerCard data={careerData} assets={assets} />}
 
-        {data?.map((item, index) => (
+        {filteredData?.map((item, index) => (
           <div
             key={item.dtEventTime + index}
             onClick={() => handleCardClick(item.teammateArr)}
-            className="cursor-pointer"
+            className="cursor-pointer pt-1"
           >
             <InfoCard item={item} />
           </div>
@@ -163,7 +260,7 @@ const InfoView = () => {
 
         <div ref={InViewRef} style={{ height: '1px' }} />
 
-        {!hasMore && data.length > 0 && (
+        {!hasMore && filteredData.length > 0 && (
           <div className="text-center text-gray-500 pb-4">没有更多数据了</div>
         )}
       </div>
