@@ -36,13 +36,22 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
     return `${hours}h${minutes}m`;
   };
 
+  const getPictureUrl = (picurl: string) => {
+    // 判断是否可以转换成数字
+    if (!Number.isNaN(Number(picurl))) {
+      return `https://playerhub.df.qq.com/playerhub/60004/object/${userData?.picurl}.png`;
+    } else {
+      return decodeURIComponent(picurl);
+    }
+  };
+
   return (
     <div className="bg-gray-800/80 backdrop-blur p-4 md:p-8 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
       <div className="flex flex-col space-y-4">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 overflow-hidden bg-gray-700">
             <img
-              src={`https://playerhub.df.qq.com/playerhub/60004/object/${userData?.picurl}.png`}
+              src={getPictureUrl(userData?.picurl)}
               alt={userData?.charac_name}
               className="w-full h-full"
             />

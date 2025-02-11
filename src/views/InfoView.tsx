@@ -52,6 +52,7 @@ const InfoView = () => {
       const res = await fetchAssets(ck);
       if (res) {
         setAssets(res);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Failed to fetch assets:', error);
@@ -64,6 +65,7 @@ const InfoView = () => {
       // 确保 res 不为空数组时才更新状态
       if (res) {
         setCareerData(res);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Failed to fetch career data:', error);
