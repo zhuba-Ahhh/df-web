@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Image } from 'antd';
 import { MapIcon } from 'assets/svg/MapIcon';
 import { SettingIcon } from 'assets/svg/SettingIcon';
 import { useContext } from 'react';
@@ -22,11 +21,11 @@ const Navbar = () => {
           />
         </button>
         <Link to="/" className="text-2xl font-bold">
-          <Image
-            height={20}
-            preview={false}
+          <img
+            alt="logo"
+            style={{ height: 20 }}
             src="https://game.gtimg.cn/images/dfm/cp/a20240906fab/s1_logo.png"
-          ></Image>
+          ></img>
         </Link>
       </li>
       <li>

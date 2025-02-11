@@ -19,7 +19,7 @@ const MatchDetailView = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 md:p-6">
+    <div className="h-full bg-gray-900 text-white p-4 md:p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* 对局基本信息 */}
         <div className="bg-gray-800/80 backdrop-blur p-4 rounded-xl border border-gray-700">
