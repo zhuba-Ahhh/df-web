@@ -97,7 +97,7 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 md:grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mt-6">
         <div className="bg-gray-700/50 p-4 rounded-lg">
           <p className="text-sm text-gray-400">对局数</p>
           <p className="text-base font-bold text-white">{careerData.soltotalfght}</p>
