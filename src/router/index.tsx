@@ -9,6 +9,7 @@ import { InfoView } from 'views/InfoView';
 import MapView from 'views/MapView';
 import { SettingView } from 'views/SettingView';
 import { MatchDetailView } from 'views/MatchDetailView';
+import { ThreadDetailView } from 'views/ThreadDetailView';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/match',
         element: <MatchDetailView />,
+      },
+      {
+        path: '/thread',
+        element: <ThreadDetailView />,
       },
       {
         path: '/props/:type?',

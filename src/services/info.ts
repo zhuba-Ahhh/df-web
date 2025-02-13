@@ -36,3 +36,24 @@ export const fetchAssets = async (ck?: string) => {
     return null;
   }
 };
+
+export interface ThreadDetailResponse {
+  title: string;
+  content: {
+    text: string;
+  };
+  createdAt: string;
+  editedAt: string;
+}
+
+export const fetchThreadDetail = async (ck?: string) => {
+  try {
+    const response = await http.get<ThreadDetailResponse>(
+      `/info/getThreadDetail${ck ? '?ck=' + ck : ''}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

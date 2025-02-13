@@ -15,6 +15,10 @@ const items: MenuItem[] = [
     label: '我的',
   },
   {
+    key: 'thread',
+    label: '每日密码',
+  },
+  {
     key: 'agent',
     label: '干员',
     children: agentsNameMap,
@@ -156,7 +160,7 @@ const Menu = () => {
   const [activeKey, setActiveKey] = useState(
     pathnameArr.length > 0 && pathnameArr[pathnameArr.length - 1] !== ''
       ? pathnameArr[pathnameArr.length - 1]
-      : 'agent'
+      : 'info'
   );
   const renderMenu = (items: MenuItem[]) => (
     <ul className="menu bg-base-200 p-0 [&_li>*]:rounded-none">
