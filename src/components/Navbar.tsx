@@ -4,6 +4,7 @@ import { SettingIcon } from 'assets/svg/SettingIcon';
 import { useContext } from 'react';
 import { Context } from 'App';
 import { MenuFoldIcon } from './icons/MenuFoldIcon';
+import { ThreadIcon } from 'assets/svg/Thread';
 
 const Navbar = () => {
   const context = useContext(Context);
@@ -29,7 +30,10 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link to="/map" className="text-2xl font-bold">
+        <Link to="/thread" className="text-2xl font-bold">
+          <ThreadIcon />
+        </Link>
+        <Link to="/map" className="text-2xl font-bold ml-4">
           <MapIcon />
         </Link>
         <Link to="/setting" className="text-2xl font-bold ml-4">
