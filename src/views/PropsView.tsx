@@ -102,26 +102,26 @@ const CardRender = ({ data }: { data: propsType }) => {
   } = data;
 
   return (
-    <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
-      <figure style={{ backgroundColor: colors[grade - 1] }} className="p-4">
-        <img src={pic} alt={objectName} className="h-60 object-contain" />
+    <div className="card bg-base-100 w-full md:w-80 shadow-xl p-2 cursor-pointer">
+      <figure style={{ backgroundColor: colors[grade - 1] }} className="p-2 md:p-4">
+        <img src={pic} alt={objectName} className="h-48 md:h-60 object-contain" />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">
+      <div className="card-body p-4">
+        <h2 className="card-title text-lg md:text-xl">
           {objectName}
           {secondClass !== 'mandel' && (
-            <div className="badge" style={{ backgroundColor: colors[grade - 1] }}>
+            <div className="badge text-sm" style={{ backgroundColor: colors[grade - 1] }}>
               {secondClassCN}
             </div>
           )}
         </h2>
-        <p>{desc}</p>
-        <div className="card-actions justify-between">
+        <p className="text-sm md:text-base">{desc}</p>
+        <div className="card-actions flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <div>{weight}kg</div>
+            <div className="text-sm md:text-base mb-2">{weight}kg</div>
             <WeightGrid width={Number(width)} length={Number(length)} />
           </div>
-          <div className="w-40 h-full">
+          <div className="w-full md:w-40">
             {BADGE_CONFIG.map(({ key, prefix, format }, index) => {
               const value = propsDetail[key];
               if (!value) return null;
@@ -165,8 +165,8 @@ const PropsView = () => {
       if ((!type || type === propType) && items?.length) {
         return (
           <Fragment key={propType}>
-            <div className="divider px-8 mt-8">{PROP_TYPES[propType]}</div>
-            <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+            <div className="divider px-4 md:px-8 mt-4 md:mt-8">{PROP_TYPES[propType]}</div>
+            <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-4 md:gap-8 mt-4 px-4 md:px-0 w-full md:w-[calc(100vw-160px)]">
               {items.map((item, index) => (
                 <CardRender key={JSON.stringify(item.id) + index} data={item} />
               ))}

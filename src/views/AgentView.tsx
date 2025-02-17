@@ -63,25 +63,33 @@ const AgentView = () => {
   return (
     <div className="h-full relative">
       {currentAgent && (
-        <div className="absolute left-4 bottom-4 z-10 bg-black/50 p-4 rounded-lg text-white w-80">
-          <h2 className="text-2xl font-bold mb-2">{currentAgent.operator}</h2>
-          <p className="text-sm text-gray-300 mb-4">{currentAgent.fullName}</p>
+        <div className="absolute left-4 bottom-4 z-10 bg-black/50 p-4 rounded-lg text-white w-80 md:w-80 mx-4 md:left-4 md:bottom-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{currentAgent.operator}</h2>
+          <p className="text-xs md:text-sm text-gray-300 mb-4">{currentAgent.fullName}</p>
 
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
-              <img src={currentAgent.armyTypePic} alt={currentAgent.armyType} className="w-6 h-6" />
-              <span>{currentAgent.armyType}</span>
+              <img
+                src={currentAgent.armyTypePic}
+                alt={currentAgent.armyType}
+                className="w-5 h-5 md:w-6 md:h-6"
+              />
+              <span className="text-sm md:text-base">{currentAgent.armyType}</span>
             </div>
-            <p className="text-sm text-gray-300">{currentAgent.armyTypeDesc}</p>
+            <p className="text-xs md:text-sm text-gray-300">{currentAgent.armyTypeDesc}</p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {currentAgent.abilitiesList.map((ability) => (
-              <div key={ability.abilityName} className="flex gap-3">
-                <img src={ability.abilityPic} alt={ability.abilityName} className="w-12 h-12" />
+              <div key={ability.abilityName} className="flex gap-2 md:gap-3">
+                <img
+                  src={ability.abilityPic}
+                  alt={ability.abilityName}
+                  className="w-10 h-10 md:w-12 md:h-12"
+                />
                 <div>
-                  <h3 className="font-medium">{ability.abilityName}</h3>
-                  <p className="text-sm text-gray-300">{ability.abilityDesc}</p>
+                  <h3 className="text-sm md:text-base font-medium">{ability.abilityName}</h3>
+                  <p className="text-xs md:text-sm text-gray-300">{ability.abilityDesc}</p>
                 </div>
               </div>
             ))}
@@ -95,9 +103,15 @@ const AgentView = () => {
         loading="eager"
       />
       <Swiper
-        className="w-8/12 relative bottom-[-8px] custom-swiper-navigation"
-        spaceBetween={30}
-        slidesPerView={5}
+        className="w-full md:w-8/12 relative bottom-0 md:bottom-[-8px] custom-swiper-navigation"
+        spaceBetween={10}
+        slidesPerView={3}
+        breakpoints={{
+          768: {
+            slidesPerView: 5,
+            spaceBetween: 30,
+          },
+        }}
         navigation={true}
         modules={[Navigation, Scrollbar, A11y]}
         loop={true}
@@ -112,16 +126,16 @@ const AgentView = () => {
             <SwiperSlide key={agent.id}>
               <div
                 onClick={() => setCurrentAgent(agent)}
-                className={`cursor-pointer relative w-36 rounded-sm border transition-all duration-300 m-2
+                className={`cursor-pointer relative w-24 md:w-36 rounded-sm border transition-all duration-300 m-1 md:m-2
                   ${isCurrentAgent ? 'border-[#f4cf67] scale-105' : 'border-transparent opacity-60 hover:opacity-90'}`}
               >
                 <img
-                  className="w-36"
+                  className="w-24 md:w-36"
                   src={agent.prePic || agent.pic}
                   alt={agent.operator}
                   loading="lazy"
                 />
-                <p className="absolute bottom-1 left-1 text-white font-extralight text-sm drop-shadow-lg">
+                <p className="absolute bottom-1 left-1 text-white font-extralight text-xs md:text-sm drop-shadow-lg">
                   {agent.operator}
                 </p>
               </div>

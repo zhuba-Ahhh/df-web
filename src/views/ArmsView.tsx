@@ -90,7 +90,7 @@ const ArmsView = () => {
 
       if (isNewSection) {
         acc.push(
-          <div className="divider px-8 mt-8" key={`divider-${item.secondClassCN}`}>
+          <div className="divider px-4 md:px-8 mt-6 md:mt-8" key={`divider-${item.secondClassCN}`}>
             {item.secondClassCN}
           </div>
         );
@@ -99,7 +99,7 @@ const ArmsView = () => {
       if (isLastItem || arr[index + 1]?.secondClass !== item.secondClass) {
         acc.push(
           <div
-            className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]"
+            className="flex flex-wrap justify-center gap-4 mt-4 w-full md:w-[calc(100vw-160px)] px-4 md:px-0"
             key={`section-${index}`}
           >
             {arr
@@ -122,7 +122,7 @@ const ArmsView = () => {
 };
 
 const GunBadge = ({ gunDetail }: { gunDetail: GunDetail }) => (
-  <div className="w-40">
+  <div className="w-full md:w-40 flex flex-wrap gap-2 md:block">
     {[
       { value: gunDetail.capacity, label: `装弹量： ${gunDetail.capacity} 发` },
       { value: gunDetail.caliber, label: `口径： ${gunDetail.caliber}` },
@@ -130,7 +130,7 @@ const GunBadge = ({ gunDetail }: { gunDetail: GunDetail }) => (
     ].map(
       ({ value, label }) =>
         value && (
-          <div key={label} className="badge badge-outline collapse mb-1">
+          <div key={label} className="badge badge-outline collapse md:mb-1">
             {label}
           </div>
         )
@@ -139,11 +139,16 @@ const GunBadge = ({ gunDetail }: { gunDetail: GunDetail }) => (
 );
 
 const CardRender = ({ data }: { data: GunItem }) => (
-  <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
+  <div className="card bg-base-100 w-full md:w-80 shadow-xl p-2 cursor-pointer">
     <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
-      <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
+      <img
+        src={data.pic}
+        alt={data.objectName}
+        className="h-40 md:h-60 object-contain"
+        loading="lazy"
+      />
     </figure>
-    <div className="card-body">
+    <div className="card-body p-4 md:p-6">
       <h2 className="card-title">
         {data.objectName}
         <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
@@ -151,7 +156,7 @@ const CardRender = ({ data }: { data: GunItem }) => (
         </div>
       </h2>
       <p>{data.desc}</p>
-      <div className="card-actions justify-between">
+      <div className="card-actions flex-col md:flex-row justify-between gap-4 md:gap-2">
         <div>
           <div>{data.weight}kg</div>
           <WeightGrid width={Number(data.width)} length={Number(data.length)} />

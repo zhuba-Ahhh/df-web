@@ -58,8 +58,8 @@ const ProtectView = () => {
     if ((type === sectionType || !type) && items) {
       return (
         <>
-          <div className="divider px-8 mt-8">{title}</div>
-          <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+          <div className="divider px-4 sm:px-8 mt-4 sm:mt-8">{title}</div>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mt-2 sm:mt-4 w-full sm:w-[calc(100vw-160px)] px-2 sm:px-0">
             {items.map((item) => (
               <CardRender key={item.id + title} data={item} />
             ))}
@@ -106,26 +106,26 @@ const CardRender = ({ data }: { data: ProtectItem }) => {
   };
 
   return (
-    <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
-      <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-4">
-        <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
+    <div className="card bg-base-100 w-full sm:w-80 shadow-xl p-2 cursor-pointer">
+      <figure style={{ backgroundColor: colors[data.grade - 1] }} className="p-2 sm:p-4">
+        <img src={data.pic} alt={data.objectName} className="h-48 sm:h-60 object-contain" />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">
+      <div className="card-body p-4 sm:p-6">
+        <h2 className="card-title text-base sm:text-lg">
           {data.objectName}
           {data.secondClass !== 'mandel' && (
-            <div className="badge" style={{ backgroundColor: colors[data.grade - 1] }}>
+            <div className="badge text-sm" style={{ backgroundColor: colors[data.grade - 1] }}>
               {data.secondClassCN}
             </div>
           )}
         </h2>
-        <p>{data.desc}</p>
-        <div className="card-actions justify-between">
+        <p className="text-sm sm:text-base">{data.desc}</p>
+        <div className="card-actions flex-col sm:flex-row justify-between gap-4 sm:gap-0">
           <div>
-            <div>{data.weight}kg</div>
+            <div className="text-sm sm:text-base">{data.weight}kg</div>
             <WeightGrid width={Number(data.width)} length={Number(data.length)} />
           </div>
-          <div className="w-40">
+          <div className="w-full sm:w-40 flex flex-wrap gap-1">
             {renderDetailBadge('capacity', '容量')}
             {renderDetailBadge('durability', '耐久')}
             {renderDetailBadge('protectArea', '保护区域')}

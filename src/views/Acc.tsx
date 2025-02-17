@@ -87,8 +87,8 @@ const AccessorySection = ({
 
   return (
     <>
-      <div className="divider px-8 mt-8">{title}</div>
-      <div className="flex flex-wrap justify-center gap-8 mt-4 w-[calc(100vw-160px)]">
+      <div className="divider px-4 mt-6 text-base">{title}</div>
+      <div className="flex flex-col items-center gap-4 mt-4 px-4 md:flex-wrap md:flex-row md:justify-center md:gap-8 md:w-[calc(100vw-160px)]">
         {items.map((item) => (
           <AccessoryCard key={item.id} data={item} />
         ))}
@@ -101,26 +101,31 @@ const AccessoryCard = ({ data }: { data: AccItem }) => {
   const bgColor = { backgroundColor: colors[data.grade - 1] };
 
   return (
-    <div className="card bg-base-100 w-80 shadow-xl p-2 cursor-pointer">
-      <figure style={bgColor} className="p-4">
-        <img src={data.pic} alt={data.objectName} className="h-60 object-contain" />
+    <div className="card bg-base-100 w-full md:w-80 shadow-xl p-2 cursor-pointer active:scale-95 transition-transform">
+      <figure style={bgColor} className="p-3 md:p-4">
+        <img
+          src={data.pic}
+          alt={data.objectName}
+          className="h-48 md:h-60 object-contain"
+          loading="lazy"
+        />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">
+      <div className="card-body p-4">
+        <h2 className="card-title text-lg md:text-xl">
           {data.objectName}
           {data.secondClass !== 'mandel' && (
-            <div className="badge" style={bgColor}>
+            <div className="badge text-sm" style={bgColor}>
               {data.secondClassCN}
             </div>
           )}
         </h2>
-        <p>{data.desc}</p>
-        <div className="card-actions justify-between">
+        <p className="text-sm md:text-base">{data.desc}</p>
+        <div className="card-actions justify-between items-center mt-2">
           <div>
-            <div>{data.weight}kg</div>
+            <div className="text-sm md:text-base">{data.weight}kg</div>
             <WeightGrid width={Number(data.width)} length={Number(data.length)} />
           </div>
-          <div className="w-40" />
+          <div className="w-24 md:w-40" />
         </div>
       </div>
     </div>
