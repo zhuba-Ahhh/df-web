@@ -35,7 +35,7 @@ export const useInfoData = () => {
   const fetchCareerData = useCallback(
     async (seasonid?: string, newCk?: string) => {
       try {
-        const res = await fetchSeason(seasonid, newCk || ck);
+        const res = await fetchSeason(seasonid || '3', newCk || ck);
         if (res) {
           setCareerData(res);
           setLoading(false);
@@ -119,7 +119,7 @@ export const useInfoData = () => {
 
   const refresh = useCallback(async () => {
     setPage(1);
-    await Promise.all([fetchCareerData(), fetchAccessories(1), fetchAssetData()]);
+    await Promise.all([fetchCareerData('3'), fetchAccessories(1), fetchAssetData()]);
   }, [fetchCareerData, fetchAccessories, fetchAssetData]);
 
   return {

@@ -103,7 +103,9 @@ const InfoView = () => {
           changeCk={changeCk}
         />
 
-        {careerData && <CareerCard data={careerData} assets={assets} />}
+        {careerData && (
+          <CareerCard data={careerData} assets={assets} key={careerData?.userData?.charac_name} />
+        )}
 
         {filteredData?.map((item, index) => (
           <div
