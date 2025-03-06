@@ -57,3 +57,21 @@ export const fetchThreadDetail = async (ck?: string) => {
     return null;
   }
 };
+
+export interface AssetData {
+  label: string;
+  records: {
+    timestamp: string;
+    data: string[];
+  }[];
+}
+
+export const getLocalAssets = async () => {
+  try {
+    const response = await http.get<AssetData[]>(`/info/getLocalAssets`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

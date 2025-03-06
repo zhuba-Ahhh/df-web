@@ -10,6 +10,7 @@ import MapView from 'views/MapView';
 import { SettingView } from 'views/SettingView';
 import { MatchDetailView } from 'views/MatchDetailView';
 import { ThreadDetailView } from 'views/ThreadDetailView';
+import { AssetsView } from 'views/AssetsView';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: '/setting',
         element: <SettingView />,
+      },
+      {
+        path: '/assets',
+        element: <AssetsView />,
       },
     ],
   },
