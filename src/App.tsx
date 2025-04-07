@@ -78,14 +78,14 @@ const App = () => {
       <Navbar />
       <main className="container max-w-[100vw] pt-[64px] flex h-[100vh] overflow-y-hidden">
         <div
-          className={`transition-all duration-300 overflow-y-auto ${
+          className={`transition-all duration-300 overflow-y-auto scrollbar-hide ${
             isMenuCollapsed ? 'w-0' : 'w-[160px]'
           } min-h-[100vh]`}
         >
           <Menu />
         </div>
         <div
-          className={`min-h-[calc(100vh - 64px)] transition-all duration-300 overflow-y-auto ${
+          className={`min-h-[calc(100vh - 64px)] transition-all duration-300 scrollbar-hide overflow-y-auto ${
             isMenuCollapsed ? 'w-[100vw]' : 'w-[calc(100vw-160px)]'
           }`}
         >

@@ -92,7 +92,7 @@ const InfoView = () => {
     <PullToRefreshify refreshing={refreshing} onRefresh={handleRefresh} renderText={renderText}>
       <div
         ref={containerRef}
-        className="flex flex-col space-y-2 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto"
+        className="flex flex-col space-y-2 md:space-y-6 p-4 md:p-6 bg-gray-900 text-white min-h-screen overflow-y-auto scrollbar-hide"
       >
         <InfoFilters
           selectedMap={selectedMap}

@@ -11,8 +11,24 @@ const config = {
       },
     },
   },
+  plugins: [
+    require('daisyui'),
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* IE and Edge */
+          '-ms-overflow-style': 'none',
+          /* Firefox */
+          'scrollbar-width': 'none',
+          /* Chrome, Safari and Opera */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+      });
+    },
+  ],
   darkMode: 'class',
-  plugins: [require('daisyui')],
 } satisfies Config;
 
 export default config;
