@@ -15,10 +15,6 @@ const items: MenuItem[] = [
     label: '我的',
   },
   {
-    key: 'assets',
-    label: '数据',
-  },
-  {
     key: 'thread',
     label: '每日密码',
   },
