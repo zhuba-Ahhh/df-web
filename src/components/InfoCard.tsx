@@ -1,5 +1,4 @@
-import { Context } from 'App';
-import { useContext } from 'react';
+import { useAppContext } from 'contexts/AppProvider';
 import {
   formatDateTime,
   formatNumber,
@@ -15,7 +14,7 @@ interface InfoCardProps {
 }
 
 export const InfoCard = ({ item }: InfoCardProps) => {
-  const context = useContext(Context);
+  const context = useAppContext();
 
   const getMapName = (mapId: string) => {
     return context?.mapName?.[mapId] || '未知地图';

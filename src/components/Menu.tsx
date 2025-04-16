@@ -16,7 +16,11 @@ const items: MenuItem[] = [
   },
   {
     key: 'thread',
-    label: '每日密码',
+    label: '密码',
+  },
+  {
+    key: 'collect',
+    label: '收藏',
   },
   {
     key: 'agent',

@@ -1,9 +1,9 @@
-import { useContext, useState, useCallback, useEffect, useMemo } from 'react';
-import { Context } from 'App';
+import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useAppContext } from 'contexts/AppProvider';
 import { ckOptions, seasonOptions } from 'common/const';
 
 const SettingView = () => {
-  const context = useContext(Context);
+  const context = useAppContext();
   const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
   const [seasonid, setSeasonid] = useState(context?.seasonid || '3');
   const [customCk, setCustomCk] = useState('');

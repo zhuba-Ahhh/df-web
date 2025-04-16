@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { Context } from 'App';
+import { useAppContext } from 'contexts/AppProvider';
 import {
   formatDateTime,
   formatDuration,
@@ -9,7 +8,7 @@ import {
 } from 'utils/format';
 
 const MatchDetailView = () => {
-  const context = useContext(Context);
+  const context = useAppContext();
   const matchData = context?.teammateArr;
 
   if (!matchData) {

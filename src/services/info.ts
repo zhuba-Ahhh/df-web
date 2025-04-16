@@ -75,3 +75,29 @@ export const getLocalAssets = async () => {
     return null;
   }
 };
+
+export interface CollectsRes {
+  iRet: string;
+  sMsg: string;
+  itemidList: { [key: string]: string };
+  typeArr: { [key: string]: number };
+  count: string;
+  nickName: string;
+  headImg: string;
+  milestoneHolds: string;
+  sCollectionHolds: string;
+  loginDayHolds: string;
+  isGiftDay: boolean;
+  isShowRankNum: boolean;
+  rankNum: string;
+}
+
+export const getCollects = async () => {
+  try {
+    const response = await http.get<CollectsRes>(`/info/getCollects`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

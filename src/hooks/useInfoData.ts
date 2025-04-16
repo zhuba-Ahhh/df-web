@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
 import type { Datum, JData } from '../types/info';
-import { Context } from 'App';
+import { useAppContext } from 'contexts/AppProvider';
 import { ckOptions } from 'common/const';
 
 export const useInfoData = () => {
-  const context = useContext(Context);
+  const context = useAppContext();
   const [data, setData] = useState<Datum[]>([]);
   const [careerData, setCareerData] = useState<JData>();
   const [assets, setAssets] = useState<[string, string, string]>();

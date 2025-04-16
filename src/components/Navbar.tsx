@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { MapIcon } from 'assets/svg/MapIcon';
 import { SettingIcon } from 'assets/svg/SettingIcon';
-import { useContext } from 'react';
-import { Context } from 'App';
+import { useAppContext } from 'contexts/AppProvider';
 import { MenuFoldIcon } from './icons/MenuFoldIcon';
 import { ThreadIcon } from 'assets/svg/Thread';
 
 const Navbar = () => {
-  const context = useContext(Context);
+  const context = useAppContext();
   return (
     <ul className="navbar bg-base-100 text-base-content fixed top-0 z-30 flex h-16 w-full justify-between bg-opacity-90 backdrop-blur transition-shadow duration-100 shadow-sm p-3 px-6 bg-background/95 supports-[backdrop-filter]:bg-background/40">
       <li>

@@ -11,6 +11,7 @@ import { SettingView } from 'views/SettingView';
 import { MatchDetailView } from 'views/MatchDetailView';
 import { ThreadDetailView } from 'views/ThreadDetailView';
 import { AssetsView } from 'views/AssetsView';
+import { CollectsVew } from 'views/CollectsVew';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: '/thread',
         element: <ThreadDetailView />,
+      },
+      {
+        path: '/collect',
+        element: <CollectsVew />,
       },
       {
         path: '/props/:type?',

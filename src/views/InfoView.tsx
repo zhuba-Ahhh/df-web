@@ -1,11 +1,11 @@
-import { useRef, useContext, useState, useMemo, useEffect } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
 import { InfoCard } from '../components/InfoCard';
 import { CareerCard } from '../components/CareerCard';
 import { useNavigate } from 'react-router-dom';
 import type { TeammateArr } from '../types/info';
-import { Context } from 'App';
+import { useAppContext } from 'contexts/AppProvider';
 import { useInfoData } from '../hooks/useInfoData';
 import { InfoFilters } from '../components/InfoFilters';
 
@@ -33,7 +33,7 @@ const InfoView = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { ref: InViewRef, inView } = useInView();
-  const context = useContext(Context);
+  const context = useAppContext();
   const [selectedMap, setSelectedMap] = useState<string>('all');
   const [refreshing, setRefreshing] = useState(false);
 

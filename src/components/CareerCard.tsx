@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import type { JData } from '../types/info';
-import { Context } from 'App';
 import { seasonOptions } from 'common/const';
+import { useAppContext } from 'contexts/AppProvider';
 
 interface CareerCardProps {
   data?: JData;
@@ -25,7 +24,7 @@ const getPictureUrl = (picurl: string) => {
 };
 
 export const CareerCard = ({ data, assets }: CareerCardProps) => {
-  const context = useContext(Context);
+  const context = useAppContext();
   const season = seasonOptions.find((item) => item.value === context?.seasonid)?.label;
 
   if (!data || !data?.careerData || !data?.userData) return null;
