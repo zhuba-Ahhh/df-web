@@ -32,6 +32,41 @@ enum Source {
   零号大坝 = '零号大坝',
 }
 
+export interface CollectMap {
+  itemidArray: { [key: string]: ItemidArray };
+  typeArray: { [key: string]: TypeArray };
+  progressArray: { [key: string]: number };
+}
+
+export interface ItemidArray {
+  id: number;
+  img: string;
+  name: string;
+  lock: boolean;
+  class: Class;
+  source: Source[];
+  purpose: Purpose[];
+}
+
+enum Class {
+  DjSize1 = 'dj_size_1',
+  DjSize12 = 'dj_size_12',
+  DjSize2 = 'dj_size_2',
+  DjSize3_4 = 'dj_size_3_4',
+  DjSize4 = 'dj_size_4',
+  DjSize4_L = 'dj_size_4_l',
+  DjSize6 = 'dj_size_6',
+  DjSize6_H = 'dj_size_6_h',
+  DjSize9 = 'dj_size_9',
+}
+
+export interface TypeArray {
+  title: string;
+  info: ItemidArray[];
+  get_num: number;
+  sum: number;
+}
+
 export interface AppContextType {
   mapName: Record<string, string>;
   agentImg: Record<number, string>;
@@ -45,6 +80,7 @@ export interface AppContextType {
   toggleMenu?: () => void;
   updateConfig?: (partialConfig: Partial<AppContextType>) => void;
   collects: collectsItem[];
+  collectMap: CollectMap;
 }
 
 export const AppContext = createContext<AppContextType | null>(null);
