@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PullStatus, PullToRefreshify } from 'react-pull-to-refreshify';
@@ -64,7 +65,7 @@ const InfoView = () => {
     if (inView && !isFetchList) {
       setPage((prev) => prev + 1);
     }
-  }, [inView, isFetchList, setPage]);
+  }, [inView]);
 
   if (loading) {
     return (

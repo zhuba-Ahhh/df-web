@@ -14,7 +14,7 @@ export const useInfoData = () => {
   const [isFetchList, setIsFetchList] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [seasonid, setSeasonid] = useState(context?.seasonid || '3');
+  const [seasonid, setSeasonid] = useState(context?.seasonid || '4');
   const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
 
   const fetchAssetData = useCallback(
@@ -116,6 +116,10 @@ export const useInfoData = () => {
       fetchAccessories(page);
     }
   }, [page, fetchAccessories]);
+
+  useEffect(() => {
+    loadMore();
+  }, [page]);
 
   const refresh = useCallback(async () => {
     setPage(1);

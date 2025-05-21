@@ -32,17 +32,19 @@ export const InfoFilters = ({
 
   return (
     <div className="flex items-center space-x-3 mb-2">
-      {mapOptions && (
+      {ckOptions && (
         <select
-          value={selectedMap}
-          onChange={(e) => setSelectedMap(e.target.value)}
+          value={ck}
+          onChange={(e) => changeCk(e.target.value)}
           className="bg-gray-800 text-white pl-2 pr-1 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
         >
-          {mapOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {ckOptions
+            ?.filter((item) => item.value !== 'custom')
+            .map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
         </select>
       )}
       {seasonOptions && (
@@ -58,19 +60,17 @@ export const InfoFilters = ({
           ))}
         </select>
       )}
-      {ckOptions && (
+      {mapOptions && (
         <select
-          value={ck}
-          onChange={(e) => changeCk(e.target.value)}
+          value={selectedMap}
+          onChange={(e) => setSelectedMap(e.target.value)}
           className="bg-gray-800 text-white pl-2 pr-1 py-1 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500"
         >
-          {ckOptions
-            ?.filter((item) => item.value !== 'custom')
-            .map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
+          {mapOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       )}
     </div>
