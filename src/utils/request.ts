@@ -18,7 +18,7 @@ export interface Result<T = unknown> {
 const service: AxiosInstance = axios.create({
   // baseURL: process.env.NODE_ENV === 'production' ? 'https://api.book.bbdaxia.com/' : '/api',
   baseURL:
-    process.env.NODE_ENV === 'production' ? 'https://api-df.zhuba.site' : 'http://localhost:3102',
+    process.env.NODE_ENV === 'production' ? 'https://api-df.zhuba.online' : 'http://localhost:3102',
   timeout: 0,
 });
 
