@@ -19,7 +19,9 @@ const instance: AxiosInstance = axios.create({
   withCredentials: true,
   validateStatus: (status) => status >= 200 && status < 400,
   baseURL:
-    process.env.NODE_ENV === 'production' ? 'https://api-df.zhuba.site/' : 'http://localhost:3100/',
+    process.env.NODE_ENV === 'production'
+      ? 'https://api-df.zhuba.online/'
+      : 'http://localhost:3100/',
 });
 
 // 添加请求拦截器
