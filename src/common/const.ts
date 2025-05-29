@@ -37,6 +37,16 @@ const ckOptions = [
     value:
       'pgv_info=ssid=s3202962438; pgv_pvid=9463615382; eas_sid=K1J7p478Q5p0x453q7Z197U8v7; RK=GbVQaBPawk; ptcz=4174c694a1d4831d8d3d8abd9d206ad91e5618a2ac8f0da010f7f242b51a89fc; iegams_milo_proxylogin_qc=101491592_%24%24_26440B7F3D3C0BA472803E8CC9CCF2AA_%24%24_FCB5074D29A743568A80EF9B2045D95D; dfqqcomrouteLine=record202410ver_record202410ver; refresh_token=; expires_time=; acctype=qc; openid=26440B7F3D3C0BA472803E8CC9CCF2AA; access_token=FCB5074D29A743568A80EF9B2045D95D; appid=101491592; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=',
   },
+  {
+    label: '时光偏向',
+    value:
+      'pgv_info=ssid=s2777336064; pgv_pvid=9887510818; eas_sid=R107U4K8Y550x4p5n6U7Z7Z9J5; RK=Wv9gCUvOw9; ptcz=99df430291a7eb5f45ebd6352ace79596f94534f1cb183b29703769ac60e7036; iegams_milo_proxylogin_qc=101491592_%24%24_336206A56BCCF9199511955C102B1ADE_%24%24_F3F1BFBF2D279B05C0032F11DBB2326B; dfqqcomrouteLine=record202410ver_record202410ver; refresh_token=; expires_time=; acctype=qc; openid=336206A56BCCF9199511955C102B1ADE; access_token=F3F1BFBF2D279B05C0032F11DBB2326B; appid=101491592; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=',
+  },
+  {
+    label: '神再佑我毛毛',
+    value:
+      'pgv_info=ssid=s6269067520; pgv_pvid=6804272000; eas_sid=b12754X8t5n0f4b8i2J9x2t293; RK=G5/k2FquR4; ptcz=ee66788ab79cbbef8c66b93807a11a02037f520180631b4105c6a2dc051ee791; iegams_milo_proxylogin_qc=101491592_%24%24_8907C2EFEC80B234F10E7D57B5A533B0_%24%24_F6DDD0A6E0A8107063C16E5205CA35B7; dfqqcomrouteLine=record202410ver_record202410ver_record202410ver_record202410ver_record202410ver_record202410ver; acctype=qc; openid=8907C2EFEC80B234F10E7D57B5A533B0; access_token=F6DDD0A6E0A8107063C16E5205CA35B7; appid=101491592; refresh_token=; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=; expires_time=',
+  },
   { label: '自定义', value: 'custom' },
 ];
 
