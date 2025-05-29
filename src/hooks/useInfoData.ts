@@ -35,7 +35,7 @@ export const useInfoData = () => {
   const fetchCareerData = useCallback(
     async (seasonid?: string, newCk?: string) => {
       try {
-        const res = await fetchSeason(seasonid || '3', newCk || ck);
+        const res = await fetchSeason(seasonid || '4', newCk || ck);
         if (res) {
           setCareerData(res);
           setLoading(false);

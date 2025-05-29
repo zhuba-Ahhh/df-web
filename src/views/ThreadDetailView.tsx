@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { fetchThreadDetail } from '../services/info';
 import type { ThreadDetailResponse } from '../services/info';
+import { useAppContext } from 'contexts/AppProvider';
 
 const ThreadDetailView = () => {
   const [data, setData] = useState<ThreadDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const { ckOptions } = useAppContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchThreadDetail();
+        const response = await fetchThreadDetail(ckOptions[0]?.value);
         setData(response);
       } catch (error) {
         console.error('Failed to fetch thread detail:', error);
@@ -19,7 +21,7 @@ const ThreadDetailView = () => {
     };
 
     fetchData();
-  }, []);
+  }, [ckOptions]);
 
   if (loading) {
     return (

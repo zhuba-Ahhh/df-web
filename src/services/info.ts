@@ -16,7 +16,7 @@ export const fetchInfo = async (page?: string, ck?: string) => {
 export const fetchSeason = async (seasonid?: string, ck?: string) => {
   try {
     const response = await http.get<JData>(
-      `/info/getSeason?seasonid=${seasonid || 1}${ck ? '&ck=' + ck : ''}`
+      `/info/getSeason?seasonid=${seasonid || 4}${ck ? '&ck=' + ck : ''}`
     );
     return response;
   } catch (error) {
