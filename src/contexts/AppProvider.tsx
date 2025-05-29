@@ -5,7 +5,7 @@ import { ckOptions } from 'common/const';
 import { AppContext, AppContextType } from './AppContext';
 
 const ck = localStorage.getItem('ck') || ckOptions[0].value;
-const seasonid = localStorage.getItem('seasonid') || '3';
+const seasonid = localStorage.getItem('seasonid') || '4';
 
 interface AppProviderProps {
   children: ReactNode;
