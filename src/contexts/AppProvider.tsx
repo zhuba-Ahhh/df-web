@@ -1,10 +1,10 @@
 import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import NProgress from 'nprogress';
 import { http } from 'utils';
-import { ckOptions } from 'common/const';
 import { AppContext, AppContextType } from './AppContext';
+import { fetchCookieList } from 'services/info'; // 从 services 导入接口方法
 
-const ck = localStorage.getItem('ck') || ckOptions[0].value;
+const ck = localStorage.getItem('ck') || '';
 const seasonid = localStorage.getItem('seasonid') || '4';
 
 interface AppProviderProps {
@@ -26,6 +26,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   }, []);
 
   const fetchConfig = useCallback(async () => {
+    const ckOptions = await fetchCookieList();
     const res = await http.get<Omit<AppContextType, 'isMenuCollapsed' | 'toggleMenu'>>('/config');
     setConfig({
       ...res,
@@ -34,6 +35,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       ck,
       seasonid,
       updateConfig,
+      ckOptions,
     });
   }, [isMenuCollapsed, toggleMenu, updateConfig]);
 

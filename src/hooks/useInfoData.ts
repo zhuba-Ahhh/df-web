@@ -3,7 +3,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
 import type { Datum, JData } from '../types/info';
 import { useAppContext } from 'contexts/AppProvider';
-import { ckOptions } from 'common/const';
 
 export const useInfoData = () => {
   const context = useAppContext();
@@ -15,6 +14,7 @@ export const useInfoData = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [seasonid, setSeasonid] = useState(context?.seasonid || '4');
+  const { ckOptions } = context;
   const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
 
   const fetchAssetData = useCallback(

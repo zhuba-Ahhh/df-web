@@ -1,5 +1,5 @@
 import { useAppContext } from 'contexts/AppProvider';
-import { ckOptions, seasonOptions } from 'common/const';
+import { seasonOptions } from 'common/const';
 
 interface InfoFiltersProps {
   selectedMap: string;
@@ -19,6 +19,7 @@ export const InfoFilters = ({
   changeCk,
 }: InfoFiltersProps) => {
   const context = useAppContext();
+  const { ckOptions } = context;
 
   const mapOptions = [
     { value: 'all', label: '全部地图' },

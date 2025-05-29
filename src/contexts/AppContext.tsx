@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { CookieItem } from 'services/info';
 import { TeammateArr } from 'types/info';
 
 type collectsItem = {
@@ -81,6 +82,7 @@ export interface AppContextType {
   updateConfig?: (partialConfig: Partial<AppContextType>) => void;
   collects: collectsItem[];
   collectMap: CollectMap;
+  ckOptions: CookieItem[];
 }
 
 export const AppContext = createContext<AppContextType | null>(null);
