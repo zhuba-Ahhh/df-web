@@ -35,7 +35,7 @@ const ckOptions = [
   {
     label: '铁板红烧鱿鱼',
     value:
-      'pgv_pvid=4895559500; eas_sid=81i7L3v9k1T8O7K3Q4y8F213u6; pgv_info=ssid=s3810672168; dfqqcomrouteLine=record202410ver_record202410ver_record202410ver; RK=tSUQeBPr2E; ptcz=56761e84298743277c44fdc9ce6e1aaf01d848ddfba89205e806370b9d360f1e; iegams_milo_proxylogin_qc=101491592_%24%24_26440B7F3D3C0BA472803E8CC9CCF2AA_%24%24_21F4AD729C637E974124A70DFFEF70EB; acctype=qc; openid=26440B7F3D3C0BA472803E8CC9CCF2AA; access_token=21F4AD729C637E974124A70DFFEF70EB; appid=101491592; refresh_token=; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=; expires_time=',
+      'pgv_info=ssid=s3202962438; pgv_pvid=9463615382; eas_sid=K1J7p478Q5p0x453q7Z197U8v7; RK=GbVQaBPawk; ptcz=4174c694a1d4831d8d3d8abd9d206ad91e5618a2ac8f0da010f7f242b51a89fc; iegams_milo_proxylogin_qc=101491592_%24%24_26440B7F3D3C0BA472803E8CC9CCF2AA_%24%24_FCB5074D29A743568A80EF9B2045D95D; dfqqcomrouteLine=record202410ver_record202410ver; refresh_token=; expires_time=; acctype=qc; openid=26440B7F3D3C0BA472803E8CC9CCF2AA; access_token=FCB5074D29A743568A80EF9B2045D95D; appid=101491592; ieg_ams_token=; ieg_ams_session_token=; ieg_ams_token_time=; ieg_ams_sign=',
   },
   { label: '自定义', value: 'custom' },
 ];
