@@ -5,36 +5,30 @@ import { fetchWeekRecord, WeekRecord } from 'services/week';
 import { useInfoData } from 'hooks/useInfoData';
 import { formatDuration, getRank } from 'components/utils';
 import { useAppContext } from 'contexts/AppProvider';
-import TopCollectiblesView from '../components/TopCollectiblesView'; // 新增导入
+import TopCollectiblesView from '../components/TopCollectiblesView';
 
-// 定义从 context.collection 中获取的物品详情类型
 export interface CollectionItemDetails {
-  // 保持导出，因为 TopCollectiblesView 会用到
   name: string;
   img?: string;
   grade?: string;
 }
 
-// 定义 context.collection 的类型结构 (如果 TopCollectiblesView 也用这个，可以考虑移到共享类型文件)
 interface CollectionData {
-  [itemid: string]: CollectionItemDetails; // itemid is a string key
+  [itemid: string]: CollectionItemDetails;
 }
 
-// 生成最近5个周日的日期（格式YYYY-MM-DD）
 const getRecentSundays = () => {
   const sundays: string[] = [];
   let current = dayjs();
   while (sundays.length < 5) {
     if (current.day() === 0) {
-      // 周日是0（dayjs中0=周日）
       sundays.push(current.format('YYYYMMDD'));
     }
     current = current.subtract(1, 'day');
   }
-  return sundays; // 按时间顺序排列
+  return sundays;
 };
 
-// 更新 parseDailyData 函数
 const parseDailyData = (rawData: string[]) => {
   if (!rawData || rawData.length === 0 || (rawData.length === 1 && rawData[0] === '')) {
     return [];
@@ -64,14 +58,13 @@ const parseDailyData = (rawData: string[]) => {
 };
 
 const WeekReportView = () => {
-  const [selectedDate, setSelectedDate] = useState(getRecentSundays()[0] || '');
+  const [selectedDate] = useState(getRecentSundays()[0] || '');
   const [reportData, setReportData] = useState<WeekRecord | null>(null);
   const [loading, setLoading] = useState(false);
 
   const { ck, changeCk } = useInfoData();
   const context = useAppContext();
 
-  // 获取周报数据
   const fetchWeekReport = useCallback(async () => {
     if (!ck) return;
     setLoading(true);
@@ -87,7 +80,6 @@ const WeekReportView = () => {
     fetchWeekReport();
   }, [selectedDate, fetchWeekReport]);
 
-  // Helper to parse and format numbers from reportData
   const getFormattedNumber = (value: string | undefined, decimalPlaces?: number) => {
     const num = parseFloat(value || '');
     if (isNaN(num)) return 'N/A';
@@ -97,8 +89,8 @@ const WeekReportView = () => {
   return (
     <div className="p-4 md:p-6 bg-gray-900 text-white min-h-screen">
       <InfoFilters
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
+        // selectedDate={selectedDate}
+        // setSelectedDate={setSelectedDate}
         ck={ck}
         changeCk={changeCk}
         dateOptions={getRecentSundays()}
@@ -122,16 +114,11 @@ const WeekReportView = () => {
               ? parsedDailyPrices[parsedDailyPrices.length - 1].totalPriceRaw
               : 0;
 
-          // 移除此处的 topCollectibles 计算
-
           return (
             <div className="mt-8 space-y-6">
-              {/* Section 1: Financial Summary */}
               <div className="bg-gray-800 rounded-lg p-4">
                 <h3 className="text-xl font-semibold mb-4 text-gray-100">行动数据</h3>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                  {' '}
-                  {/* <--- 修改在这里 */}
                   <div className="flex flex-col p-3 bg-gray-700 rounded-md">
                     <span className="text-sm text-gray-400">本周总带入</span>
                     <span className="text-lg font-medium text-green-400">
@@ -161,15 +148,13 @@ const WeekReportView = () => {
                 </div>
               </div>
 
-              {/* New Section for Top Collectibles */}
               <div className="bg-gray-800 rounded-lg p-4">
                 <TopCollectiblesView
                   carryOutListStr={reportData.CarryOut_highprice_list}
-                  collectionData={context?.allCollectsMap as CollectionData | undefined} // 确保类型匹配
+                  collectionData={context?.allCollectsMap as CollectionData | undefined}
                 />
               </div>
 
-              {/* Section 2: Detailed Stats Grid (TopCollectiblesView removed from here) */}
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-gray-800 rounded-lg">
                 <div className="flex flex-col">
                   <span className="text-sm text-gray-300">排名分数</span>
@@ -195,18 +180,6 @@ const WeekReportView = () => {
                     {getFormattedNumber(reportData.total_Kill_Player)}
                   </span>
                 </div>
-                {/* <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">总死亡次数</span>
-                  <span className="text-lg font-medium">
-                    {getFormattedNumber(reportData.total_Death_Count)}
-                  </span>
-                </div> */}
-                {/* <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">总移动距离（公里）</span>
-                  <span className="text-lg font-medium">
-                    {Number(getFormattedNumber(reportData.Total_Mileage, 1)) / 10000 / 100}
-                  </span>
-                </div> */}
                 <div className="flex flex-col">
                   <span className="text-sm text-gray-300">总游戏时长（小时）</span>
                   <span className="text-lg font-medium">
@@ -217,16 +190,8 @@ const WeekReportView = () => {
                   <span className="text-sm text-gray-300">总场数（场）</span>
                   <span className="text-lg font-medium">{reportData.total_sol_num}</span>
                 </div>
-                {/* TopCollectiblesView was here, now moved out */}
-                {/* <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">总移动距离（公里）</span>
-                  <span className="text-lg font-medium">
-                    {Number(getFormattedNumber(reportData.Total_Mileage, 1)) / 10000 / 100}
-                  </span>
-                </div> */}
               </div>
 
-              {/* Section 3: Daily Price List */}
               {parsedDailyPrices.length > 0 && (
                 <div className="bg-gray-800 rounded-lg p-4">
                   <h3 className="text-lg font-medium mb-4 text-gray-100">本周每日仓库价值</h3>
