@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { CookieItem } from 'services/info';
 import { TeammateArr } from 'types/info';
+import { CollectionItemDetails } from 'views/WeekReportView';
 
 type collectsItem = {
   title: string;
@@ -83,6 +84,7 @@ export interface AppContextType {
   collects: collectsItem[];
   collectMap: CollectMap;
   ckOptions: CookieItem[];
+  allCollectsMap: Record<string, CollectionItemDetails>;
 }
 
 export const AppContext = createContext<AppContextType | null>(null);

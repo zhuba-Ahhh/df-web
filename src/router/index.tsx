@@ -6,12 +6,13 @@ import { ProtectView } from 'views/ProtectView';
 import { AccView } from 'views/Acc';
 import { AgentView } from 'views/AgentView';
 import { InfoView } from 'views/InfoView';
-import MapView from 'views/MapView';
+import { MapView } from 'views/MapView';
 import { SettingView } from 'views/SettingView';
 import { MatchDetailView } from 'views/MatchDetailView';
 import { ThreadDetailView } from 'views/ThreadDetailView';
 import { AssetsView } from 'views/AssetsView';
 import { CollectsVew } from 'views/CollectsVew';
+import { WeekReportView } from 'views/WeekReportView';
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: '/assets',
         element: <AssetsView />,
+      },
+      {
+        path: '/week-report', // 新增周报页面路由
+        element: <WeekReportView />,
       },
     ],
   },

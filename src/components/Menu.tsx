@@ -23,6 +23,10 @@ const items: MenuItem[] = [
     label: '收藏',
   },
   {
+    key: 'week-report',
+    label: '周报',
+  },
+  {
     key: 'agent',
     label: '干员',
     children: agentsNameMap,

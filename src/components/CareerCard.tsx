@@ -1,18 +1,12 @@
 import type { JData } from '../types/info';
 import { seasonOptions } from 'common/const';
 import { useAppContext } from 'contexts/AppProvider';
+import { formatDuration, getRank } from './utils';
 
 interface CareerCardProps {
   data?: JData;
   assets?: [string, string, string];
 }
-
-const formatDuration = (seconds: string) => {
-  const totalMinutes = Math.floor(Number(seconds) / 60);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  return `${hours}h${minutes}m`;
-};
 
 const getPictureUrl = (picurl: string) => {
   // 判断是否可以转换成数字
@@ -31,19 +25,6 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
 
   const { careerData, userData } = data;
 
-  const getRank = (point: string) => {
-    const rankPoint = Number(point);
-    const rankMap = context?.rank || {};
-    const ranks = Object.entries(rankMap).sort((a, b) => Number(a[0]) - Number(b[0]));
-
-    for (const [threshold, rankName] of ranks) {
-      if (rankPoint <= Number(threshold)) {
-        return rankName;
-      }
-    }
-    return rankMap['6000'] || '未知段位';
-  };
-
   return (
     <div className="bg-gray-800/80 backdrop-blur p-4 md:p-8 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
       <div className="flex flex-col space-y-4">
@@ -61,7 +42,7 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
             </h2>
             <p className="text-gray-400">
               {season}赛季 &nbsp;
-              {getRank(careerData?.rankpoint)} ({careerData?.rankpoint})
+              {getRank(careerData?.rankpoint, context.rank || {})} ({careerData?.rankpoint})
             </p>
             {/* 资产展示 */}
             {assets && (
