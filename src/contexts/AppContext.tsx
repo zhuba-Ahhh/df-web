@@ -18,6 +18,7 @@ export interface Info {
   class: string;
   source: Source[];
   purpose: Purpose[];
+  pid: string;
 }
 
 enum Purpose {

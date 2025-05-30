@@ -92,9 +92,9 @@ export interface CollectsRes {
   rankNum: string;
 }
 
-export const getCollects = async () => {
+export const getCollects = async (ck: string) => {
   try {
-    const response = await http.get<CollectsRes>(`/info/getCollects`);
+    const response = await http.get<CollectsRes>(`/info/getCollects?ck=${ck}`);
     return response;
   } catch (error) {
     console.error(error);
