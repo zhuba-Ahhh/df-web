@@ -27,7 +27,7 @@ const getRecentSundays = () => {
   while (sundays.length < 5) {
     if (current.day() === 0) {
       // 周日是0（dayjs中0=周日）
-      sundays.push(current.format('YYYY-MM-DD'));
+      sundays.push(current.format('YYYYMMDD'));
     }
     current = current.subtract(1, 'day');
   }
