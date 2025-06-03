@@ -197,7 +197,9 @@ export type DailySecretResponse = Array<{
  */
 export const getDailySecret = async (ck: string): Promise<DailySecretResponse> => {
   try {
-    const response = await http.post<DailySecretResponse>(`/info/getDailySecret`, { ck });
+    const response = await http.get<DailySecretResponse>(
+      `/info/getDailySecret${ck ? '?ck=' + ck : ''}`
+    );
     return response;
   } catch (error) {
     console.error(error);
