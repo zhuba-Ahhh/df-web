@@ -146,3 +146,12 @@ body {
 .custom-swiper-navigation .swiper-button-prev::after {
   font-size: 24px;
 }
+
+/* 隐藏滚动条但保持滚动功能 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* 隐藏WebKit内核浏览器的滚动条 */
+}
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox隐藏滚动条 */
+  -ms-overflow-style: none; /* IE/Edge隐藏滚动条 */
+}

@@ -6,6 +6,7 @@ import { useInfoData } from 'hooks/useInfoData';
 import { formatDuration, getRank } from 'components/utils';
 import { useAppContext } from 'contexts/AppProvider';
 import TopCollectiblesView from '../components/TopCollectiblesView';
+import { AppContextType } from 'contexts/AppContext';
 
 export interface CollectionItemDetails {
   name: string;
@@ -57,6 +58,105 @@ const parseDailyData = (rawData: string[]) => {
   });
 };
 
+const calculateNetIncome = (parsedDailyPrices: ReturnType<typeof parseDailyData>) => {
+  if (parsedDailyPrices.length === 0) return { netIncome: 0, sundayWarehouseValue: 0 };
+
+  // 计算每日仓库价值的最大最小值及其对应日期
+  const maxItem = parsedDailyPrices.reduce(
+    (max, item) => (item.totalPriceRaw > max.totalPriceRaw ? item : max),
+    parsedDailyPrices[0]
+  );
+  const minItem = parsedDailyPrices.reduce(
+    (min, item) => (item.totalPriceRaw < min.totalPriceRaw ? item : min),
+    parsedDailyPrices[0]
+  );
+
+  const maxDate = dayjs(maxItem.date);
+  const minDate = dayjs(minItem.date);
+  const isMinAfterMax = minDate.isAfter(maxDate);
+  const netIncome = isMinAfterMax
+    ? -(maxItem.totalPriceRaw - minItem.totalPriceRaw)
+    : maxItem.totalPriceRaw - minItem.totalPriceRaw;
+
+  const sundayWarehouseValue = parsedDailyPrices[parsedDailyPrices.length - 1].totalPriceRaw;
+
+  return { netIncome, sundayWarehouseValue };
+};
+
+const getFormattedNumber = (value: string | undefined, decimalPlaces?: number) => {
+  const num = parseFloat(value || '');
+  if (isNaN(num)) return 'N/A';
+  return decimalPlaces !== undefined ? num.toFixed(decimalPlaces) : num.toLocaleString();
+};
+
+const renderActionDataGrid = ({
+  consumePrice,
+  gainedPrice,
+  netIncome,
+  sundayWarehouseValue,
+}: {
+  consumePrice: number;
+  gainedPrice: number;
+  netIncome: number;
+  sundayWarehouseValue: number;
+}) => (
+  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+    <div className="flex flex-col p-3 bg-gray-700 rounded-md">
+      <span className="text-sm text-gray-400">本周总带入</span>
+      <span className="text-lg font-medium text-green-400">{consumePrice.toLocaleString()}</span>
+    </div>
+    <div className="flex flex-col p-3 bg-gray-700 rounded-md">
+      <span className="text-sm text-gray-400">本周总带出</span>
+      <span className="text-lg font-medium text-red-400">{gainedPrice.toLocaleString()}</span>
+    </div>
+    <div className="flex flex-col p-3 bg-gray-700 rounded-md">
+      <span className="text-sm text-gray-400">本周净收益</span>
+      <span className={`text-lg font-medium ${netIncome >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+        {netIncome.toLocaleString()}
+      </span>
+    </div>
+    <div className="flex flex-col p-3 bg-gray-700 rounded-md">
+      <span className="text-sm text-gray-400">周日仓库价值最高</span>
+      <span className="text-lg font-medium text-yellow-400">
+        {sundayWarehouseValue.toLocaleString()}
+      </span>
+    </div>
+  </div>
+);
+
+const renderStatisticsGrid = (reportData: WeekRecord, context: AppContextType) => (
+  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-gray-800 rounded-lg">
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">排名分数</span>
+      <span className="text-lg font-medium">
+        {getRank(reportData.Rank_Score, context.rank || {})} ({reportData.Rank_Score})
+      </span>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">百万撤离（次）</span>
+      <span className="text-lg font-medium">{reportData.GainedPrice_overmillion_num}</span>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">Boss击杀</span>
+      <span className="text-lg font-medium">{getFormattedNumber(reportData.total_Kill_Boss)}</span>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">玩家击杀</span>
+      <span className="text-lg font-medium">
+        {getFormattedNumber(reportData.total_Kill_Player)}
+      </span>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">总游戏时长（小时）</span>
+      <span className="text-lg font-medium">{formatDuration(reportData.total_Online_Time)}</span>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-300">总场数（场）</span>
+      <span className="text-lg font-medium">{reportData.total_sol_num}</span>
+    </div>
+  </div>
+);
+
 const WeekReportView = () => {
   const [selectedDate] = useState(getRecentSundays()[0] || '');
   const [reportData, setReportData] = useState<WeekRecord | null>(null);
@@ -80,12 +180,6 @@ const WeekReportView = () => {
     fetchWeekReport();
   }, [selectedDate, fetchWeekReport]);
 
-  const getFormattedNumber = (value: string | undefined, decimalPlaces?: number) => {
-    const num = parseFloat(value || '');
-    if (isNaN(num)) return 'N/A';
-    return decimalPlaces !== undefined ? num.toFixed(decimalPlaces) : num.toLocaleString();
-  };
-
   return (
     <div className="p-4 md:p-6 bg-gray-900 text-white min-h-screen">
       <InfoFilters
@@ -108,50 +202,18 @@ const WeekReportView = () => {
 
           const dailyPricesData = reportData.Total_Price ? reportData.Total_Price.split(',') : [];
           const parsedDailyPrices = parseDailyData(dailyPricesData);
-
-          // 计算每日仓库价值的最大最小值差值
-          const dailyPrices = parsedDailyPrices.map((item) => item.totalPriceRaw);
-          const maxPrice = dailyPrices.length > 0 ? Math.max(...dailyPrices) : 0;
-          const minPrice = dailyPrices.length > 0 ? Math.min(...dailyPrices) : 0;
-          const netIncome = maxPrice - minPrice;
-
-          const sundayWarehouseValue =
-            parsedDailyPrices.length > 0
-              ? parsedDailyPrices[parsedDailyPrices.length - 1].totalPriceRaw
-              : 0;
+          const { netIncome, sundayWarehouseValue } = calculateNetIncome(parsedDailyPrices);
 
           return (
             <div className="mt-8 space-y-6">
               <div className="bg-gray-800 rounded-lg p-4">
                 <h3 className="text-xl font-semibold mb-4 text-gray-100">行动数据</h3>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                  <div className="flex flex-col p-3 bg-gray-700 rounded-md">
-                    <span className="text-sm text-gray-400">本周总带入</span>
-                    <span className="text-lg font-medium text-green-400">
-                      {consumePrice.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex flex-col p-3 bg-gray-700 rounded-md">
-                    <span className="text-sm text-gray-400">本周总带出</span>
-                    <span className="text-lg font-medium text-red-400">
-                      {gainedPrice.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex flex-col p-3 bg-gray-700 rounded-md">
-                    <span className="text-sm text-gray-400">本周净收益</span>
-                    <span
-                      className={`text-lg font-medium ${netIncome >= 0 ? 'text-green-400' : 'text-red-400'}`}
-                    >
-                      {netIncome.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex flex-col p-3 bg-gray-700 rounded-md">
-                    <span className="text-sm text-gray-400">周日仓库价值最高</span>
-                    <span className="text-lg font-medium text-yellow-400">
-                      {sundayWarehouseValue.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
+                {renderActionDataGrid({
+                  consumePrice,
+                  gainedPrice,
+                  netIncome,
+                  sundayWarehouseValue,
+                })}
               </div>
 
               <div className="bg-gray-800 rounded-lg p-4">
@@ -161,42 +223,7 @@ const WeekReportView = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-gray-800 rounded-lg">
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">排名分数</span>
-                  <span className="text-lg font-medium">
-                    {getRank(reportData.Rank_Score, context.rank || {})} ({reportData.Rank_Score})
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">百万撤离（次）</span>
-                  <span className="text-lg font-medium">
-                    {reportData.GainedPrice_overmillion_num}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">Boss击杀</span>
-                  <span className="text-lg font-medium">
-                    {getFormattedNumber(reportData.total_Kill_Boss)}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">玩家击杀</span>
-                  <span className="text-lg font-medium">
-                    {getFormattedNumber(reportData.total_Kill_Player)}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">总游戏时长（小时）</span>
-                  <span className="text-lg font-medium">
-                    {formatDuration(reportData.total_Online_Time)}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-300">总场数（场）</span>
-                  <span className="text-lg font-medium">{reportData.total_sol_num}</span>
-                </div>
-              </div>
+              {renderStatisticsGrid(reportData, context)}
 
               {parsedDailyPrices.length > 0 && (
                 <div className="bg-gray-800 rounded-lg p-4">

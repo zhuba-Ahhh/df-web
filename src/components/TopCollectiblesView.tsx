@@ -34,7 +34,7 @@ const stringToArray = (param: string) => {
     .filter(Boolean); // 移除解析失败的 null 项
 };
 
-// 辅助函数：获取最有价值的三个收藏品 (从 WeekReportView 移过来并调整)
+// 辅助函数：获取最有价值的收藏品 (从 WeekReportView 移过来并调整)
 const getTopCollectibles = (
   carryOutListStr: string | undefined,
   collectionData: CollectionData | undefined
@@ -67,7 +67,7 @@ const getTopCollectibles = (
     }
   }
 
-  return collectibles.sort((a, b) => b.singlePrice - a.singlePrice).slice(0, 3);
+  return collectibles.sort((a, b) => b.singlePrice - a.singlePrice).slice(0, 10);
 };
 
 interface TopCollectiblesViewProps {
@@ -85,7 +85,7 @@ const TopCollectiblesView: React.FC<TopCollectiblesViewProps> = ({
     <div className="flex flex-col">
       <span className="text-sm text-gray-300">本周带出最有价值藏品</span>
       {topCollectibles.length > 0 ? (
-        <div className="flex mt-1 space-x-2 items-start">
+        <div className="flex mt-1 space-x-2 items-start overflow-x-auto pr-1 hide-scrollbar">
           {topCollectibles.map((collectible) => (
             <div
               key={collectible.itemid}
