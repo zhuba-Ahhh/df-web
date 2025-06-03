@@ -52,19 +52,19 @@ export const InfoCard = ({ item }: InfoCardProps) => {
       </div>
 
       <div className="flex flex-col space-y-1 w-full md:w-auto md:items-end">
-        <div className="grid grid-cols-3 gap-1 md:gap-2 md:flex md:items-center md:space-x-4">
-          <div className="flex flex-col items-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm mb-0.5 md:mb-1">击杀玩家</span>
+        <div className="grid grid-cols-3 md:flex md:items-center md:space-x-4">
+          <div className="flex items-center justify-center md:items-end">
+            <span className="text-gray-400 text-[10px] md:text-sm">击杀玩家：</span>
             <span className="text-sm md:text-lg font-bold tracking-wider">{item.KillCount}</span>
           </div>
-          <div className="flex flex-col items-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm mb-0.5 md:mb-1">收益</span>
+          <div className="flex items-center justify-center md:items-end">
+            <span className="text-gray-400 text-[10px] md:text-sm">收益：</span>
             <span className="text-sm md:text-lg font-bold text-yellow-500 tracking-wider">
               {formatNumber(item.FinalPrice)}
             </span>
           </div>
-          <div className="flex flex-col items-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm mb-0.5 md:mb-1">净收益</span>
+          <div className="flex items-center justify-center md:items-end">
+            <span className="text-gray-400 text-[10px] md:text-sm">净赚：</span>
             <span
               className={`text-sm md:text-lg font-bold ${getStatusColor1(
                 item.flowCalGainedPrice
