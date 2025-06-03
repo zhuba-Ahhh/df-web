@@ -8,6 +8,7 @@ const config = {
       colors: {
         '--bgColor': '#F6F8FA',
         '--modBgColor': '#ffffff',
+        'theme-primary': '#0ff796',
       },
     },
   },

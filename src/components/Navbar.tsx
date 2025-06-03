@@ -4,6 +4,8 @@ import { SettingIcon } from 'assets/svg/SettingIcon';
 import { useAppContext } from 'contexts/AppProvider';
 import { MenuFoldIcon } from './icons/MenuFoldIcon';
 import { ThreadIcon } from 'assets/svg/Thread';
+import { CollectIcon } from './icons/CollectIcon';
+import { WeekReportIcon } from './icons/WeekReportIcon';
 
 const Navbar = () => {
   const context = useAppContext();
@@ -12,7 +14,7 @@ const Navbar = () => {
       <li>
         <button
           onClick={context?.toggleMenu}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors mr-4"
+          className="p-2 hover:bg-theme-primary rounded-lg transition-colors mr-1"
         >
           <MenuFoldIcon
             className={`w-6 h-6 text-gray-200 transition-transform ${
@@ -20,7 +22,17 @@ const Navbar = () => {
             }`}
           />
         </button>
-        <Link to="/" className="text-2xl font-bold">
+        <Link to="/collect" className="text-2xl font-bold">
+          <button className="p-2 hover:bg-theme-primary rounded-lg mr-1">
+            <CollectIcon className={`w-6 h-6 text-gray-200`} />
+          </button>
+        </Link>
+        <Link to="/week-report" className="text-2xl font-bold">
+          <button className="p-2 hover:bg-theme-primary rounded-lg mr-1">
+            <WeekReportIcon className={`w-6 h-6 text-gray-200`} />
+          </button>
+        </Link>
+        <Link to="/" className="text-2xl font-bold ml-1">
           <img
             alt="logo"
             style={{ height: 20 }}

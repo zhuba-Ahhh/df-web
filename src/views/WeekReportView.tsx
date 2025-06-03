@@ -7,6 +7,7 @@ import { formatDuration, getRank } from 'components/utils';
 import { useAppContext } from 'contexts/AppProvider';
 import TopCollectiblesView from '../components/TopCollectiblesView';
 import { AppContextType } from 'contexts/AppContext';
+import { weekdayMap } from '../common/const';
 
 export interface CollectionItemDetails {
   name: string;
@@ -17,6 +18,12 @@ export interface CollectionItemDetails {
 interface CollectionData {
   [itemid: string]: CollectionItemDetails;
 }
+
+const getFormattedNumber = (value: string | undefined, decimalPlaces?: number) => {
+  const num = parseFloat(value || '');
+  if (isNaN(num)) return 'N/A';
+  return decimalPlaces !== undefined ? num.toFixed(decimalPlaces) : num.toLocaleString();
+};
 
 const getRecentSundays = () => {
   const sundays: string[] = [];
@@ -38,20 +45,34 @@ const parseDailyData = (rawData: string[]) => {
     const parts = item.split('-');
     if (parts.length < 3) {
       console.warn('Malformed daily data item:', item);
-      return { date: '无效数据', weekday: '', totalPriceFormatted: 'N/A', totalPriceRaw: 0 };
+      return {
+        date: '无效数据',
+        weekday: '',
+        weekdayEn: '',
+        totalPriceFormatted: 'N/A',
+        totalPriceRaw: 0,
+      };
     }
     const [weekday, dateStr, priceStr] = parts;
     const price = Number(priceStr);
     if (isNaN(price)) {
       console.warn('Invalid price in daily data item:', item);
-      return { date: '无效数据', weekday: '', totalPriceFormatted: 'N/A', totalPriceRaw: 0 };
+      return {
+        date: '无效数据',
+        weekday: '',
+        weekdayEn: '',
+        totalPriceFormatted: 'N/A',
+        totalPriceRaw: 0,
+      };
     }
+    const weekdayEn = weekdayMap.find((wd) => wd.value === weekday)?.key || weekday;
     return {
       date:
         dateStr && dateStr.length === 8
           ? `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`
           : dateStr || '未知日期',
       weekday: weekday || '未知',
+      weekdayEn: weekdayEn,
       totalPriceFormatted: price.toLocaleString(),
       totalPriceRaw: price,
     };
@@ -59,9 +80,9 @@ const parseDailyData = (rawData: string[]) => {
 };
 
 const calculateNetIncome = (parsedDailyPrices: ReturnType<typeof parseDailyData>) => {
-  if (parsedDailyPrices.length === 0) return { netIncome: 0, sundayWarehouseValue: 0 };
+  if (parsedDailyPrices.length === 0) return { netIncome: 0, maxItem: null }; // 返回最大值项
 
-  // 计算每日仓库价值的最大最小值及其对应日期
+  // 计算每日仓库价值的最大项
   const maxItem = parsedDailyPrices.reduce(
     (max, item) => (item.totalPriceRaw > max.totalPriceRaw ? item : max),
     parsedDailyPrices[0]
@@ -78,29 +99,21 @@ const calculateNetIncome = (parsedDailyPrices: ReturnType<typeof parseDailyData>
     ? -(maxItem.totalPriceRaw - minItem.totalPriceRaw)
     : maxItem.totalPriceRaw - minItem.totalPriceRaw;
 
-  const sundayWarehouseValue = parsedDailyPrices[parsedDailyPrices.length - 1].totalPriceRaw;
-
-  return { netIncome, sundayWarehouseValue };
-};
-
-const getFormattedNumber = (value: string | undefined, decimalPlaces?: number) => {
-  const num = parseFloat(value || '');
-  if (isNaN(num)) return 'N/A';
-  return decimalPlaces !== undefined ? num.toFixed(decimalPlaces) : num.toLocaleString();
+  return { netIncome, maxItem }; // 返回最大值项
 };
 
 const renderActionDataGrid = ({
   consumePrice,
   gainedPrice,
   netIncome,
-  sundayWarehouseValue,
+  maxItem, // 接收最大值项
 }: {
   consumePrice: number;
   gainedPrice: number;
   netIncome: number;
-  sundayWarehouseValue: number;
+  maxItem: ReturnType<typeof parseDailyData>[number] | null;
 }) => (
-  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+  <div className="grid grid-cols-2 gap-x-3 gap-y-2">
     <div className="flex flex-col p-3 bg-gray-700 rounded-md">
       <span className="text-sm text-gray-400">本周总带入</span>
       <span className="text-lg font-medium text-green-400">{consumePrice.toLocaleString()}</span>
@@ -116,16 +129,18 @@ const renderActionDataGrid = ({
       </span>
     </div>
     <div className="flex flex-col p-3 bg-gray-700 rounded-md">
-      <span className="text-sm text-gray-400">周日仓库价值最高</span>
+      <span className="text-sm text-gray-400">
+        {maxItem ? `${maxItem.weekdayEn}价值最高` : '本周价值最高'}
+      </span>
       <span className="text-lg font-medium text-yellow-400">
-        {sundayWarehouseValue.toLocaleString()}
+        {maxItem ? maxItem.totalPriceFormatted : 'N/A'}
       </span>
     </div>
   </div>
 );
 
 const renderStatisticsGrid = (reportData: WeekRecord, context: AppContextType) => (
-  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-gray-800 rounded-lg">
+  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-3 bg-gray-800 rounded-lg">
     <div className="flex flex-col">
       <span className="text-sm text-gray-300">排名分数</span>
       <span className="text-lg font-medium">
@@ -181,7 +196,7 @@ const WeekReportView = () => {
   }, [selectedDate, fetchWeekReport]);
 
   return (
-    <div className="p-4 md:p-6 bg-gray-900 text-white min-h-screen">
+    <div className="p-3 md:p-6 bg-gray-900 text-white min-h-screen">
       <InfoFilters
         // selectedDate={selectedDate}
         // setSelectedDate={setSelectedDate}
@@ -202,21 +217,21 @@ const WeekReportView = () => {
 
           const dailyPricesData = reportData.Total_Price ? reportData.Total_Price.split(',') : [];
           const parsedDailyPrices = parseDailyData(dailyPricesData);
-          const { netIncome, sundayWarehouseValue } = calculateNetIncome(parsedDailyPrices);
+          const { netIncome, maxItem } = calculateNetIncome(parsedDailyPrices);
 
           return (
-            <div className="mt-8 space-y-6">
-              <div className="bg-gray-800 rounded-lg p-4">
-                <h3 className="text-xl font-semibold mb-4 text-gray-100">行动数据</h3>
+            <div className="mt-2 space-y-2">
+              <div className="bg-gray-800 rounded-lg p-3">
+                <h3 className="text-xl font-semibold mb-2 text-gray-100">行动数据</h3>
                 {renderActionDataGrid({
                   consumePrice,
                   gainedPrice,
                   netIncome,
-                  sundayWarehouseValue,
+                  maxItem, // 传递最大值项
                 })}
               </div>
 
-              <div className="bg-gray-800 rounded-lg p-4">
+              <div className="bg-gray-800 rounded-lg p-3">
                 <TopCollectiblesView
                   carryOutListStr={reportData.CarryOut_highprice_list}
                   collectionData={context?.allCollectsMap as CollectionData | undefined}
@@ -226,7 +241,7 @@ const WeekReportView = () => {
               {renderStatisticsGrid(reportData, context)}
 
               {parsedDailyPrices.length > 0 && (
-                <div className="bg-gray-800 rounded-lg p-4">
+                <div className="bg-gray-800 rounded-lg p-3">
                   <h3 className="text-lg font-medium mb-4 text-gray-100">本周每日仓库价值</h3>
                   <div className="space-y-2">
                     {parsedDailyPrices.map((item, index, arr) => {
@@ -237,16 +252,13 @@ const WeekReportView = () => {
                       return (
                         <div
                           key={index}
-                          className="flex justify-between items-center px-4 py-3 bg-gray-700 rounded-lg"
+                          className="flex justify-between items-center px-3 py-2 bg-gray-700 rounded-lg"
                         >
-                          <div className="flex items-center space-y-1 flex-col">
-                            <span className="text-sm text-gray-300">{item.date}</span>
-                            <span className="ml-2 text-xs text-gray-400">({item.weekday})</span>
+                          <div className="flex items-center space-x-1">
+                            <span className="text-base text-gray-300">{item.date.slice(5)}</span>
+                            <span className="ml-2 text-base text-gray-400">({item.weekdayEn})</span>
                           </div>
-                          <div className="flex items-center space-y-1 flex-col">
-                            <span className="text-base font-medium text-gray-100">
-                              {item.totalPriceFormatted}
-                            </span>
+                          <div className="flex items-center space-x-1">
                             {index > 0 && (
                               <span
                                 className={`text-sm font-medium ${
@@ -257,6 +269,9 @@ const WeekReportView = () => {
                                 {difference.toLocaleString()}
                               </span>
                             )}
+                            <span className="text-base font-medium text-gray-100">
+                              {item.totalPriceFormatted}
+                            </span>
                           </div>
                         </div>
                       );
@@ -268,7 +283,7 @@ const WeekReportView = () => {
           );
         })()
       ) : (
-        <div className="mt-8 text-center text-gray-400">无本周数据记录</div>
+        <div className="mt-4 text-center text-gray-400">无本周数据记录</div>
       )}
     </div>
   );

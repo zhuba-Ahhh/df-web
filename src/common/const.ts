@@ -50,4 +50,14 @@ const ckOptions = [
   { label: '自定义', value: 'custom' },
 ];
 
-export { colors, agentsNameMap, seasonOptions, ckOptions };
+const weekdayMap = [
+  { key: '周一', value: 'Monday' },
+  { key: '周二', value: 'Tuesday' },
+  { key: '周三', value: 'Wednesday' },
+  { key: '周四', value: 'Thursday' },
+  { key: '周五', value: 'Friday' },
+  { key: '周六', value: 'Saturday' },
+  { key: '周日', value: 'Sunday' },
+];
+
+export { colors, agentsNameMap, seasonOptions, ckOptions, weekdayMap };
