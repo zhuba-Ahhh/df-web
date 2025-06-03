@@ -229,20 +229,38 @@ const WeekReportView = () => {
                 <div className="bg-gray-800 rounded-lg p-4">
                   <h3 className="text-lg font-medium mb-4 text-gray-100">本周每日仓库价值</h3>
                   <div className="space-y-2">
-                    {parsedDailyPrices.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between items-center px-4 py-3 bg-gray-700 rounded-lg"
-                      >
-                        <div>
-                          <span className="text-sm text-gray-300">{item.date}</span>
-                          <span className="ml-2 text-xs text-gray-400">({item.weekday})</span>
+                    {parsedDailyPrices.map((item, index, arr) => {
+                      // 计算与前一日的差值（首日差值为0）
+                      const prevPrice = index > 0 ? arr[index - 1].totalPriceRaw : 0;
+                      const difference = item.totalPriceRaw - prevPrice;
+
+                      return (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center px-4 py-3 bg-gray-700 rounded-lg"
+                        >
+                          <div className="flex items-center space-y-1 flex-col">
+                            <span className="text-sm text-gray-300">{item.date}</span>
+                            <span className="ml-2 text-xs text-gray-400">({item.weekday})</span>
+                          </div>
+                          <div className="flex items-center space-y-1 flex-col">
+                            <span className="text-base font-medium text-gray-100">
+                              {item.totalPriceFormatted}
+                            </span>
+                            {index > 0 && (
+                              <span
+                                className={`text-sm font-medium ${
+                                  difference >= 0 ? 'text-green-400' : 'text-red-400'
+                                }`}
+                              >
+                                {difference >= 0 ? '+' : ''}
+                                {difference.toLocaleString()}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <span className="text-base font-medium text-gray-100">
-                          {item.totalPriceFormatted}
-                        </span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}

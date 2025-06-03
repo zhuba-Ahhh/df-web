@@ -40,7 +40,7 @@ export const InfoFilters = ({
     : [];
 
   return (
-    <div className="flex items-center space-x-3 mb-2">
+    <div className="flex items-center space-x-2 mb-1 overflow-x-auto hide-scrollbar">
       {ckOptions && (
         <select
           value={ck}

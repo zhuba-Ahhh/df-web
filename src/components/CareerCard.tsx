@@ -26,7 +26,7 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
   const { careerData, userData } = data;
 
   return (
-    <div className="bg-gray-800/80 backdrop-blur p-3 md:p-4 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
+    <div className="bg-gray-800/80 backdrop-blur p-2 md:p-3 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
       <div className="flex flex-col space-y-3">
         <div className="flex items-center space-x-4">
           <div className="w-14 h-14 overflow-hidden bg-gray-700">
@@ -82,7 +82,7 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mt-4">
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mt-2">
         <div className="bg-gray-700/50 p-3 rounded-lg">
           <p className="text-xs text-gray-400">对局数</p>
           <p className="text-sm font-bold text-white">{careerData.soltotalfght}</p>

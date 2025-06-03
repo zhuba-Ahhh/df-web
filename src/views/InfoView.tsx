@@ -112,7 +112,7 @@ const InfoView = () => {
           <div
             key={item.dtEventTime + index}
             onClick={() => handleCardClick(item.teammateArr)}
-            className="cursor-pointer pt-1"
+            className="cursor-pointer"
           >
             <InfoCard item={item} />
           </div>
