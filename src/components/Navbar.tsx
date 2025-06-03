@@ -22,22 +22,22 @@ const Navbar = () => {
             }`}
           />
         </button>
-        <Link to="/collect" className="text-2xl font-bold">
-          <button className="p-2 hover:bg-theme-primary rounded-lg mr-1">
-            <CollectIcon className={`w-6 h-6 text-gray-200`} />
-          </button>
+        <Link to="/" className="text-2xl font-bold mr-1 p-2">
+          <img
+            alt="logo"
+            style={{ height: 24 }}
+            src="https://game.gtimg.cn/images/dfm/favicon.ico"
+          ></img>
         </Link>
         <Link to="/week-report" className="text-2xl font-bold">
           <button className="p-2 hover:bg-theme-primary rounded-lg mr-1">
             <WeekReportIcon className={`w-6 h-6 text-gray-200`} />
           </button>
         </Link>
-        <Link to="/" className="text-2xl font-bold ml-1">
-          <img
-            alt="logo"
-            style={{ height: 20 }}
-            src="https://game.gtimg.cn/images/dfm/cp/a20240906fab/s1_logo.png"
-          ></img>
+        <Link to="/collect" className="text-2xl font-bold">
+          <button className="p-2 hover:bg-theme-primary rounded-lg mr-1">
+            <CollectIcon className={`w-6 h-6 text-gray-200`} />
+          </button>
         </Link>
       </li>
       <li>
