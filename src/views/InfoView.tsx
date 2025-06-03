@@ -10,6 +10,7 @@ import { useAppContext } from 'contexts/AppProvider';
 import { useInfoData } from '../hooks/useInfoData';
 import { InfoFilters } from '../components/InfoFilters';
 import { YesterdayProfitCard } from '../components/YesterdayProfitCard';
+import { DailySecretCard } from 'components/DailySecretCard';
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -108,6 +109,8 @@ const InfoView = () => {
         {careerData && (
           <CareerCard data={careerData} assets={assets} key={careerData?.userData?.charac_name} />
         )}
+
+        {ck && <DailySecretCard ck={ck} />}
 
         {ck && <YesterdayProfitCard ck={ck} />}
 

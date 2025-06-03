@@ -184,3 +184,23 @@ export const getYesterdayProfit = async (ck: string) => {
     return null;
   }
 };
+
+export type DailySecretResponse = Array<{
+  mapName: string;
+  key: number;
+}>;
+
+/**
+ * 获取每日情报（地图信息）。
+ * @param ck 用户身份凭证 (cookie string)。
+ * @returns 返回每日情报数据的Promise，若出错则返回null。
+ */
+export const getDailySecret = async (ck: string): Promise<DailySecretResponse> => {
+  try {
+    const response = await http.post<DailySecretResponse>(`/info/getDailySecret`, { ck });
+    return response;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
