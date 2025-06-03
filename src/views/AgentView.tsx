@@ -147,4 +147,4 @@ const AgentView = () => {
   );
 };
 
-export { AgentView };
+export default AgentView;

@@ -186,4 +186,4 @@ const PropsView = () => {
   );
 };
 
-export { PropsView };
+export default PropsView;

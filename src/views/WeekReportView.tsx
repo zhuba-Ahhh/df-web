@@ -289,4 +289,4 @@ const WeekReportView = () => {
   );
 };
 
-export { WeekReportView };
+export default WeekReportView;

@@ -132,4 +132,4 @@ const AccessoryCard = ({ data }: { data: AccItem }) => {
   );
 };
 
-export { AccView };
+export default AccView;

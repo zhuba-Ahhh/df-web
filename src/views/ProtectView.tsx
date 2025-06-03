@@ -139,4 +139,4 @@ const CardRender = ({ data }: { data: ProtectItem }) => {
   );
 };
 
-export { ProtectView };
+export default ProtectView;

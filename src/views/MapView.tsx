@@ -8,4 +8,4 @@ const MapView = () => {
   );
 };
 
-export { MapView };
+export default MapView;

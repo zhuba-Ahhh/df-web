@@ -19,7 +19,6 @@
     }
   },
   "dependencies": {
-    "@ant-design/charts": "^2.2.7",
     "ahooks": "^3.8.1",
     "axios": "^1.6.8",
     "daisyui": "^4.12.10",

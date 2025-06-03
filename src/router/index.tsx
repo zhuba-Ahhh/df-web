@@ -1,23 +1,35 @@
+/* eslint-disable import/no-unresolved */
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react'; // 导入 lazy 和 Suspense
 import App from '../App';
-import { PropsView } from 'views/PropsView';
-import { ArmsView } from 'views/ArmsView';
-import { ProtectView } from 'views/ProtectView';
-import { AccView } from 'views/Acc';
-import { AgentView } from 'views/AgentView';
-import { InfoView } from 'views/InfoView';
-import { MapView } from 'views/MapView';
-import { SettingView } from 'views/SettingView';
-import { MatchDetailView } from 'views/MatchDetailView';
-import { ThreadDetailView } from 'views/ThreadDetailView';
-import { AssetsView } from 'views/AssetsView';
-import { CollectsVew } from 'views/CollectsVew';
-import { WeekReportView } from 'views/WeekReportView';
+import InfoView from 'views/InfoView';
+
+// 懒加载所有视图组件
+
+const PropsView = lazy(() => import('views/PropsView'));
+const ArmsView = lazy(() => import('views/ArmsView'));
+const ProtectView = lazy(() => import('views/ProtectView'));
+const AccView = lazy(() => import('views/Acc'));
+const AgentView = lazy(() => import('views/AgentView'));
+const MapView = lazy(() => import('views/MapView'));
+const SettingView = lazy(() => import('views/SettingView'));
+const MatchDetailView = lazy(() => import('views/MatchDetailView'));
+const ThreadDetailView = lazy(() => import('views/ThreadDetailView'));
+const CollectsVew = lazy(() => import('views/CollectsVew'));
+const WeekReportView = lazy(() => import('views/WeekReportView'));
+
+// 建议：创建一个通用的加载中组件，例如 <PageLoader />
+// eslint-disable-next-line react-refresh/only-export-components
+const LazyLoad = (Component: React.ElementType) => (
+  <Suspense fallback={<div>加载中...</div>}>
+    <Component />
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <App />, // App 组件内部应该有一个 <Suspense> 包裹 <Outlet />
     children: [
       {
         path: '/',
@@ -25,61 +37,57 @@ const router = createBrowserRouter([
       },
       {
         path: '/info',
-        element: <InfoView />,
+        element: LazyLoad(InfoView),
       },
       {
         path: '/match',
-        element: <MatchDetailView />,
+        element: LazyLoad(MatchDetailView),
       },
       {
         path: '/thread',
-        element: <ThreadDetailView />,
+        element: LazyLoad(ThreadDetailView),
       },
       {
         path: '/collect',
-        element: <CollectsVew />,
+        element: LazyLoad(CollectsVew),
       },
       {
         path: '/props/:type?',
-        element: <PropsView />,
+        element: LazyLoad(PropsView),
       },
       {
         path: '/agent/:type?',
-        element: <AgentView />,
+        element: LazyLoad(AgentView),
       },
       {
         path: '/arms/:type?',
-        element: <ArmsView />,
+        element: LazyLoad(ArmsView),
       },
       {
         path: '/protect/:type?',
-        element: <ProtectView />,
+        element: LazyLoad(ProtectView),
       },
       {
         path: '/acc/:type?',
-        element: <AccView />,
+        element: LazyLoad(AccView),
       },
       {
         path: '/map',
-        element: <MapView />,
+        element: LazyLoad(MapView),
       },
       {
         path: '/setting',
-        element: <SettingView />,
+        element: LazyLoad(SettingView),
       },
       {
-        path: '/assets',
-        element: <AssetsView />,
-      },
-      {
-        path: '/week-report', // 新增周报页面路由
-        element: <WeekReportView />,
+        path: '/week-report',
+        element: LazyLoad(WeekReportView),
       },
     ],
   },
   {
-    path: '*', // 匹配所有未定义的路径
-    element: <Navigate to="/" replace />, // 重定向到首页
+    path: '*',
+    element: <Navigate to="/" replace />,
   },
 ]);
 

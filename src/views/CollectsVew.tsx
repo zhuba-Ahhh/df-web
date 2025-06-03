@@ -86,4 +86,4 @@ const CollectsVew = () => {
   );
 };
 
-export { CollectsVew };
+export default CollectsVew;

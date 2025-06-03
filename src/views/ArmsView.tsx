@@ -167,4 +167,4 @@ const CardRender = ({ data }: { data: GunItem }) => (
   </div>
 );
 
-export { ArmsView };
+export default ArmsView;

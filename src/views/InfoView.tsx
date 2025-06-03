@@ -140,4 +140,4 @@ const InfoView = () => {
   );
 };
 
-export { InfoView };
+export default InfoView;

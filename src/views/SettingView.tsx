@@ -193,4 +193,4 @@ const SettingView = () => {
   );
 };
 
-export { SettingView };
+export default SettingView;

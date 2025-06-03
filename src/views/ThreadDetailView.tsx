@@ -57,4 +57,4 @@ const ThreadDetailView = () => {
   );
 };
 
-export { ThreadDetailView };
+export default ThreadDetailView;

@@ -91,4 +91,4 @@ const MatchDetailView = () => {
   );
 };
 
-export { MatchDetailView };
+export default MatchDetailView;
