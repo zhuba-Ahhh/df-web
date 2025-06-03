@@ -105,10 +105,16 @@ const WeekReportView = () => {
         (() => {
           const gainedPrice = parseFloat(reportData.Gained_Price) || 0;
           const consumePrice = parseFloat(reportData.consume_Price) || 0;
-          const netIncome = consumePrice - gainedPrice;
 
           const dailyPricesData = reportData.Total_Price ? reportData.Total_Price.split(',') : [];
           const parsedDailyPrices = parseDailyData(dailyPricesData);
+
+          // 计算每日仓库价值的最大最小值差值
+          const dailyPrices = parsedDailyPrices.map((item) => item.totalPriceRaw);
+          const maxPrice = dailyPrices.length > 0 ? Math.max(...dailyPrices) : 0;
+          const minPrice = dailyPrices.length > 0 ? Math.min(...dailyPrices) : 0;
+          const netIncome = maxPrice - minPrice;
+
           const sundayWarehouseValue =
             parsedDailyPrices.length > 0
               ? parsedDailyPrices[parsedDailyPrices.length - 1].totalPriceRaw
@@ -122,13 +128,13 @@ const WeekReportView = () => {
                   <div className="flex flex-col p-3 bg-gray-700 rounded-md">
                     <span className="text-sm text-gray-400">本周总带入</span>
                     <span className="text-lg font-medium text-green-400">
-                      {gainedPrice.toLocaleString()}
+                      {consumePrice.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex flex-col p-3 bg-gray-700 rounded-md">
                     <span className="text-sm text-gray-400">本周总带出</span>
                     <span className="text-lg font-medium text-red-400">
-                      {consumePrice.toLocaleString()}
+                      {gainedPrice.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex flex-col p-3 bg-gray-700 rounded-md">
