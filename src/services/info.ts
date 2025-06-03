@@ -150,3 +150,37 @@ export const updateCookieItem = async (label: string, value: string) => {
     return null;
   }
 };
+
+export interface IYesterdayProfit {
+  currentTime: string;
+  solDetail: SolDetail;
+}
+
+export interface SolDetail {
+  recentGain: number;
+  recentGainDate: string;
+  userCollectionTop: UserCollectionTop;
+}
+
+export interface UserCollectionTop {
+  date: string;
+  list: List[];
+}
+
+export interface List {
+  count: string;
+  objectID: string;
+  price: string;
+}
+
+export const getYesterdayProfit = async (ck: string) => {
+  try {
+    const response = await http.get<IYesterdayProfit>(
+      `/info/getYesterdayProfit${ck ? '?ck=' + ck : ''}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

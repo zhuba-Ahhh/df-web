@@ -9,6 +9,7 @@ import type { TeammateArr } from '../types/info';
 import { useAppContext } from 'contexts/AppProvider';
 import { useInfoData } from '../hooks/useInfoData';
 import { InfoFilters } from '../components/InfoFilters';
+import { YesterdayProfitCard } from '../components/YesterdayProfitCard';
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -107,6 +108,8 @@ const InfoView = () => {
         {careerData && (
           <CareerCard data={careerData} assets={assets} key={careerData?.userData?.charac_name} />
         )}
+
+        {ck && <YesterdayProfitCard ck={ck} />}
 
         {filteredData?.map((item, index) => (
           <div
