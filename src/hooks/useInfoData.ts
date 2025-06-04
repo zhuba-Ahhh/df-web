@@ -134,6 +134,7 @@ export const useInfoData = () => {
       context?.updateConfig?.({ seasonid: newSeasonId });
       setSeasonid(newSeasonId);
       fetchCareerData(newSeasonId);
+      fetchPersonResource(newSeasonId, ck, false);
     },
     [context, fetchCareerData]
   );
