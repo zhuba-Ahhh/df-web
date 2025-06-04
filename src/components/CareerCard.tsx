@@ -2,10 +2,13 @@ import type { JData } from '../types/info';
 import { seasonOptions } from 'common/const';
 import { useAppContext } from 'contexts/AppProvider';
 import { formatDuration, getRank } from './utils';
+import { IPersonResource } from 'services/info';
+import { formatNumberToKMB } from 'utils';
 
 interface CareerCardProps {
   data?: JData;
   assets?: [string, string, string];
+  personResource: IPersonResource;
 }
 
 const getPictureUrl = (picurl: string) => {
@@ -17,7 +20,7 @@ const getPictureUrl = (picurl: string) => {
   }
 };
 
-export const CareerCard = ({ data, assets }: CareerCardProps) => {
+export const CareerCard = ({ data, assets, personResource }: CareerCardProps) => {
   const context = useAppContext();
   const season = seasonOptions.find((item) => item.value === context?.seasonid)?.label;
 
@@ -25,8 +28,12 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
 
   const { careerData, userData } = data;
 
+  const kd = personResource
+    ? `${Number(personResource.lowKillDeathRatio) / 100}/${Number(personResource.medKillDeathRatio) / 100}/${Number(personResource.highKillDeathRatio) / 100}`
+    : (Number(careerData.soltotalkill) / Number(careerData.soltotalfght)).toFixed(2);
+
   return (
-    <div className="bg-gray-800/80 backdrop-blur p-2 md:p-3 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
+    <div className="bg-gray-800/80 backdrop-blur p-2 md:3 rounded-xl md:rounded-2xl shadow-lg border border-gray-700">
       <div className="flex flex-col space-y-3">
         <div className="flex items-center space-x-4">
           <div className="w-14 h-14 overflow-hidden bg-gray-700">
@@ -83,34 +90,48 @@ export const CareerCard = ({ data, assets }: CareerCardProps) => {
         </div>
       </div>
       <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mt-2">
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">对局数</p>
           <p className="text-sm font-bold text-white">{careerData.soltotalfght}</p>
         </div>
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">成功撤离</p>
           <p className="text-sm font-bold text-green-500">{careerData.solttotalescape}</p>
         </div>
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">游戏时长</p>
           <p className="text-sm font-bold text-green-500">
             {formatDuration(careerData.solduration)}
           </p>
         </div>
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">撤离率</p>
           <p className="text-sm font-bold text-green-500">{careerData.solescaperatio}</p>
         </div>
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">击败干员</p>
           <p className="text-sm font-bold text-yellow-500">{careerData.soltotalkill}</p>
         </div>
-        <div className="bg-gray-700/50 p-3 rounded-lg">
+        <div className="bg-gray-700/50 p-2 rounded-lg">
           <p className="text-xs text-gray-400">KD</p>
-          <p className="text-sm font-bold text-blue-500">
-            {(Number(careerData.soltotalkill) / Number(careerData.soltotalfght)).toFixed(2)}
-          </p>
+          <p className="text-sm font-bold text-blue-500">{kd}</p>
         </div>
+        {personResource && (
+          <>
+            <div className="bg-gray-700/50 p-2 rounded-lg">
+              <p className="text-xs text-gray-400">赚损比</p>
+              <p className="text-sm font-bold  text-green-500">
+                {formatNumberToKMB(Number(personResource?.profitLossRatio) / 100)}
+              </p>
+            </div>
+            <div className="bg-gray-700/50 p-2 rounded-lg">
+              <p className="text-xs text-gray-400">收益</p>
+              <p className="text-sm font-bold  text-green-500">
+                {formatNumberToKMB(Number(personResource?.totalGainedPrice))}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -11,3 +11,28 @@ export const formatDuration = (seconds: number) => {
   const remainingSeconds = seconds % 60;
   return remainingSeconds > 0 ? `${minutes}分${remainingSeconds}秒` : `${minutes}分钟`;
 };
+
+/**
+ * 将数字格式化为 K（千）或 M（百万）或 B (十亿) 单位，并保留一位小数。
+ * @param num 要格式化的数字。
+ * @returns 格式化后的字符串。
+ */
+export const formatNumberToKMB = (num: number | string): string => {
+  const number = typeof num === 'string' ? parseFloat(num) : num;
+
+  if (isNaN(number)) {
+    return String(num); // 如果不是有效数字，返回原始值
+  }
+
+  if (Math.abs(number) >= 1000000000) {
+    // 新增对 B (十亿) 的判断
+    return (number / 1000000000).toFixed(2) + 'B';
+  }
+  if (Math.abs(number) >= 1000000) {
+    return (number / 1000000).toFixed(1) + 'M';
+  }
+  if (Math.abs(number) >= 1000) {
+    return (number / 1000).toFixed(1) + 'K';
+  }
+  return number.toString();
+};

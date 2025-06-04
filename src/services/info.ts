@@ -206,3 +206,59 @@ export const getDailySecret = async (ck: string): Promise<DailySecretResponse> =
     return [];
   }
 };
+
+export type IPersonResource = {
+  redTotalMoney: number;
+  redTotalCount: number;
+  mapList: MapList[];
+  redCollectionDetail: RedCollectionDetail[];
+  levelScore: string;
+  majorLevel: string;
+  majorLevelMax: string;
+  profitLossRatio: string;
+  highKillDeathRatio: string;
+  lowKillDeathRatio: string;
+  medKillDeathRatio: string;
+  totalEscape: string;
+  totalFight: string;
+  totalGainedPrice: string;
+  totalGameTime: string;
+  totalKill: string;
+  userRank: number;
+  gunPlayList: GunPlayList[];
+} | null;
+
+interface GunPlayList {
+  objectID: number;
+  escapeCount: number;
+  fightCount: number;
+  totalPrice: number;
+}
+
+interface RedCollectionDetail {
+  objectID: number;
+  count: number;
+  price: number;
+}
+
+interface MapList {
+  mapID: number;
+  totalCount: number;
+  leaveCount: number;
+}
+
+export const getPersonResource = async (
+  ck: string,
+  seasonid: string,
+  isAllSeason?: boolean
+): Promise<IPersonResource | null> => {
+  try {
+    const response = await http.get<IPersonResource>(
+      `/info/getPersonResource${ck ? '?ck=' + ck : ''}&seasonid=${seasonid} &isAllSeason=${isAllSeason}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

@@ -92,7 +92,7 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
               <img
                 src={currentItem.pic}
                 alt={currentItem.desc}
-                className="w-12 h-12 md:w-14 md:h-14 object-contain mb-1 rounded"
+                className="w-8 h-8 md:w-12 md:h-12 object-contain mb-1 rounded"
               />
               <span
                 className="text-xs text-gray-300 truncate w-full text-center"

@@ -31,7 +31,7 @@ export const InfoCard = ({ item }: InfoCardProps) => {
           />
         </div>
         <div className="flex flex-col space-y-1 md:space-y-1.5">
-          <div className="text-[10px] md:text-sm text-gray-400 flex flex-wrap items-center space-x-1 md:space-x-2 font-medium">
+          <div className="text-[12px] md:text-sm text-gray-400 flex flex-wrap items-center space-x-1 md:space-x-2 font-medium">
             <span
               className={`${getStatusColor(item.EscapeFailReason)} bg-opacity-20 tracking-wider px-1 rounded-sm`}
             >
@@ -43,7 +43,7 @@ export const InfoCard = ({ item }: InfoCardProps) => {
             <span className="text-gray-600">|</span>
             <span className="text-gray-300">{getMapName(item.MapId)}</span>
           </div>
-          <div className="text-[10px] md:text-sm text-gray-400 flex flex-wrap items-center space-x-1 md:space-x-2 font-medium">
+          <div className="text-[12px] md:text-sm text-gray-400 flex flex-wrap items-center space-x-1 md:space-x-2 font-medium">
             <span className="text-gray-300 px-1">{formatDateTime(item.dtEventTime)}</span>
             <span className="text-gray-600">|</span>
             <span className="text-gray-300">{formatDuration(item.DurationS)}</span>
@@ -54,17 +54,17 @@ export const InfoCard = ({ item }: InfoCardProps) => {
       <div className="flex flex-col space-y-1 w-full md:w-auto md:items-end">
         <div className="grid grid-cols-3 md:flex md:items-center md:space-x-4">
           <div className="flex items-center justify-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm">击杀玩家：</span>
+            <span className="text-gray-400 text-[12px] md:text-sm">击杀玩家：</span>
             <span className="text-sm md:text-lg font-bold tracking-wider">{item.KillCount}</span>
           </div>
           <div className="flex items-center justify-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm">收益：</span>
+            <span className="text-gray-400 text-[12px] md:text-sm">收益：</span>
             <span className="text-sm md:text-lg font-bold text-yellow-500 tracking-wider">
               {formatNumber(item.FinalPrice)}
             </span>
           </div>
           <div className="flex items-center justify-center md:items-end">
-            <span className="text-gray-400 text-[10px] md:text-sm">净赚：</span>
+            <span className="text-gray-400 text-[12px] md:text-sm">净赚：</span>
             <span
               className={`text-sm md:text-lg font-bold ${getStatusColor1(
                 item.flowCalGainedPrice

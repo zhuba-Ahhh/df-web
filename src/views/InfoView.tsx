@@ -53,6 +53,7 @@ const InfoView = () => {
     changeCk,
     changeSeasonId,
     refresh,
+    personResource,
   } = useInfoData();
 
   const filteredData = useMemo(() => {
@@ -107,7 +108,12 @@ const InfoView = () => {
         />
 
         {careerData && (
-          <CareerCard data={careerData} assets={assets} key={careerData?.userData?.charac_name} />
+          <CareerCard
+            data={careerData}
+            assets={assets}
+            key={careerData?.userData?.charac_name}
+            personResource={personResource}
+          />
         )}
 
         {ck && <DailySecretCard ck={ck} />}

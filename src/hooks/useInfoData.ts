@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
-import { fetchInfo, fetchSeason, fetchAssets } from '../services/info';
+import {
+  fetchInfo,
+  fetchSeason,
+  fetchAssets,
+  getPersonResource,
+  IPersonResource,
+} from '../services/info';
 import type { Datum, JData } from '../types/info';
 import { useAppContext } from 'contexts/AppProvider';
 
@@ -16,6 +22,7 @@ export const useInfoData = () => {
   const [seasonid, setSeasonid] = useState(context?.seasonid || '4');
   const { ckOptions } = context;
   const [ck, setCk] = useState(context?.ck || ckOptions[0].value);
+  const [personResource, setPersonResource] = useState<IPersonResource>(null);
 
   const fetchAssetData = useCallback(
     async (newCk?: string) => {
@@ -70,10 +77,29 @@ export const useInfoData = () => {
     [ck]
   );
 
+  const fetchPersonResource = useCallback(
+    async (seasonid: string, newCk?: string, isAllSeason = false) => {
+      try {
+        const res = await getPersonResource(newCk || ck, seasonid, isAllSeason);
+        if (res) {
+          setPersonResource(res);
+        }
+      } catch (error) {
+        console.error('Failed to fetch person resource:', error);
+      }
+    },
+    [ck, seasonid]
+  );
+
   useEffect(() => {
     const initializeData = async () => {
       try {
-        await Promise.all([fetchCareerData(seasonid), fetchAccessories(1), fetchAssetData()]);
+        await Promise.all([
+          fetchCareerData(seasonid),
+          fetchAccessories(1),
+          fetchAssetData(),
+          fetchPersonResource(seasonid),
+        ]);
       } catch (error) {
         console.error('Failed to initialize data:', error);
       } finally {
@@ -94,6 +120,7 @@ export const useInfoData = () => {
       setHasMore(true);
       Promise.all([
         fetchCareerData(seasonid, newCk),
+        fetchPersonResource(seasonid, newCk, false),
         fetchAccessories(1, newCk),
         fetchAssetData(newCk),
       ]);
@@ -144,5 +171,6 @@ export const useInfoData = () => {
     changeSeasonId,
     loadMore,
     refresh,
+    personResource,
   };
 };
