@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getYesterdayProfit, IYesterdayProfit, List as ProfitListItem } from '../services/info';
-import { useAppContext } from '../contexts/AppProvider';
 import { colors } from 'common/const';
+import { getObjectDetails, List } from 'services/props';
 
 interface YesterdayProfitCardProps {
   ck?: string;
@@ -11,7 +11,7 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
   const [profitData, setProfitData] = useState<IYesterdayProfit | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { allCollectsMap } = useAppContext(); // 用于获取物品名称和图标
+  const [topItems, setTopItems] = useState<List[]>([]);
 
   useEffect(() => {
     if (!ck) {
@@ -28,6 +28,12 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
         const data = await getYesterdayProfit(ck);
         if (data && data.solDetail) {
           setProfitData(data);
+          const objectIDs = data.solDetail.userCollectionTop.list.map(
+            (item: ProfitListItem) => item.objectID
+          );
+
+          const list = await getObjectDetails(ck, objectIDs);
+          setTopItems(list || []);
         } else {
           setProfitData(null); // 清除旧数据
           // setError('未能获取昨日收益数据。'); // 或者显示无数据
@@ -55,8 +61,6 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
     return `${dateStr.substring(4, 6)}月${dateStr.substring(6, 8)}日`;
   };
 
-  const topItems = userCollectionTop?.list?.slice(0, 3) || [];
-
   return (
     <div className="bg-gray-800 rounded-lg p-2 md:p-3 md:rounded-2xl shadow-lg border border-gray-700">
       <div className="flex items-center justify-between mb-1">
@@ -73,31 +77,35 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2 md:gap-3">
-        {topItems.map((item: ProfitListItem) => {
-          const collectItem = allCollectsMap && allCollectsMap[item.objectID];
-          const itemName = collectItem?.name || `物品 ${item.objectID}`;
-          const itemImage =
-            `https://playerhub.df.qq.com/playerhub/60004/object/${collectItem.img}` ||
-            'https://game.gtimg.cn/images/dfm/favicon.ico';
-
-          const price = parseInt(item.price).toLocaleString();
+        {userCollectionTop?.list?.map((item) => {
+          const currentItem = topItems.find((i) => String(i.objectID) === item.objectID);
+          if (!currentItem) {
+            return null;
+          }
 
           return (
             <div
               key={item.objectID}
               className="flex flex-col items-center bg-gray-700 p-2 rounded-md shadow relative"
-              style={{ backgroundColor: colors[Number(collectItem.grade || 0) - 1] }}
+              style={{ backgroundColor: colors[Number(currentItem.grade || 0) - 1] }}
             >
               <img
-                src={itemImage}
-                alt={itemName}
+                src={currentItem.pic}
+                alt={currentItem.desc}
                 className="w-12 h-12 md:w-14 md:h-14 object-contain mb-1 rounded"
               />
-              <span className="text-xs text-gray-300 truncate w-full text-center" title={itemName}>
-                {itemName}
+              <span
+                className="text-xs text-gray-300 truncate w-full text-center"
+                title={currentItem.desc}
+              >
+                {currentItem.objectName}
               </span>
-              <span className={`text-xs text-yellow-400 font-semibold`}>{price}</span>
-              <span className="text-xs text-gray-400 absolute right-1 top-1">x{item.count}</span>
+              <span className={`text-xs text-yellow-400 font-semibold`}>
+                {parseInt(item?.price || '').toLocaleString()}
+              </span>
+              <span className="text-xs text-gray-400 absolute right-1 top-1">
+                x{item?.count || 0}
+              </span>
             </div>
           );
         })}

@@ -1,9 +1,5 @@
 import { http } from '../utils';
 
-export interface GetObjectDetailsResponse {
-  list: List[];
-}
-
 export interface List {
   avgPrice: number;
   desc: string;
@@ -27,16 +23,12 @@ export interface PropsDetail {
   type: string;
 }
 
-export const getObjectDetails = async (
-  ck: string,
-  objectIDs: string
-): Promise<GetObjectDetailsResponse | null> => {
+export const getObjectDetails = async (ck: string, objectIDs: string[]): Promise<List[] | null> => {
   try {
-    const response = await http.post<GetObjectDetailsResponse>(`/props/getObjectDetails`, {
-      ck,
-      objectIDs,
-    });
-    return response;
+    const response = await http.get<List[]>(
+      `/props/getObjectDetails?ck=${ck}&objectIDs=${objectIDs}`
+    );
+    return response || [];
   } catch (error) {
     console.error(error);
     return null;
