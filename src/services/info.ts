@@ -125,6 +125,19 @@ export const addCookieItem = async (item: CookieItem) => {
   }
 };
 
+// 新增：删除 Cookie 对象（通过 label 匹配删除）
+export const deleteItem = async (label: string) => {
+  try {
+    const response = await http.get<CookieItem | null>(
+      `/info/deleteCookie?label=${encodeURIComponent(label)}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 // 新增：修改 Cookie 对象（通过 label 匹配，更新 value）
 export const updateCookieItem = async (label: string, value: string) => {
   try {

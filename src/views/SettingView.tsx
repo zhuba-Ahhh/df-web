@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useAppContext } from 'contexts/AppProvider';
 import { seasonOptions } from 'common/const';
-import { addCookieItem, fetchCookieList, updateCookieItem } from 'services/info';
+import { addCookieItem, fetchCookieList, updateCookieItem, deleteItem } from 'services/info';
 
 const SettingView = () => {
   const context = useAppContext();
@@ -71,6 +71,21 @@ const SettingView = () => {
     setNewCookieLabel(label); // 标签不可修改，保持原值
   }, []);
 
+  // 新增 Cookie 管理区域
+  const handleDeleteCookie = useCallback(async () => {
+    if (!editingLabel) return;
+    const response = await deleteItem(editingLabel);
+    if (response) {
+      // 刷新 Cookie 列表
+      const newCkOptions = await fetchCookieList();
+      context?.updateConfig?.({ ckOptions: newCkOptions });
+      // 退出编辑模式
+      setIsEditing(false);
+      setEditingLabel('');
+      setNewCookieValue('');
+    }
+  }, [editingLabel, context]);
+
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">设置</h1>
@@ -114,7 +129,7 @@ const SettingView = () => {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2" style={{ display: 'none' }}>
           <label htmlFor="seasonid" className="block text-sm font-medium">
             Season ID
           </label>
@@ -160,12 +175,20 @@ const SettingView = () => {
                   新增 Cookie
                 </button>
               ) : (
-                <button
-                  onClick={handleUpdateCookie}
-                  className="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition-colors"
-                >
-                  保存修改
-                </button>
+                <>
+                  <button
+                    onClick={handleUpdateCookie}
+                    className="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition-colors"
+                  >
+                    保存修改
+                  </button>
+                  <button
+                    onClick={handleDeleteCookie}
+                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    删除
+                  </button>
+                </>
               )}
               {isEditing && (
                 <button
