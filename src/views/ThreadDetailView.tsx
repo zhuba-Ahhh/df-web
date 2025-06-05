@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchThreadDetail } from '../services/info';
-import type { ThreadDetailResponse } from '../services/info';
 import { useAppContext } from 'contexts/AppProvider';
+import { ThreadDetailResponse } from 'types/info';
 
 const ThreadDetailView = () => {
   const [data, setData] = useState<ThreadDetailResponse | null>(null);

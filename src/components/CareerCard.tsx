@@ -1,8 +1,7 @@
-import type { JData } from '../types/info';
+import type { IPersonResource, JData } from '../types/info';
 import { seasonOptions } from 'common/const';
 import { useAppContext } from 'contexts/AppProvider';
 import { formatDuration, getRank } from './utils';
-import { IPersonResource } from 'services/info';
 import { formatNumberToKMB } from 'utils';
 
 interface CareerCardProps {

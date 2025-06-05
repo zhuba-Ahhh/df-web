@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getYesterdayProfit, IYesterdayProfit, List as ProfitListItem } from '../services/info';
+import { getYesterdayProfit } from '../services/info';
 import { colors } from 'common/const';
 import { getObjectDetails, List } from 'services/props';
+import { IYesterdayProfit } from 'types/info';
 
 interface YesterdayProfitCardProps {
   ck?: string;
@@ -28,9 +29,7 @@ const YesterdayProfitCard: React.FC<YesterdayProfitCardProps> = ({ ck }) => {
         const data = await getYesterdayProfit(ck);
         if (data && data.solDetail) {
           setProfitData(data);
-          const objectIDs = data.solDetail.userCollectionTop.list.map(
-            (item: ProfitListItem) => item.objectID
-          );
+          const objectIDs = data.solDetail.userCollectionTop.list.map((item) => item.objectID);
 
           const list = await getObjectDetails(ck, objectIDs);
           setTopItems(list || []);

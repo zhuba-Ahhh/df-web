@@ -1,5 +1,16 @@
 import { http } from 'utils';
-import type { Datum, JData } from '../types/info';
+import type {
+  AssetData,
+  CollectsRes,
+  CookieItem,
+  DailySecretResponse,
+  Datum,
+  IManufacturingDetails,
+  IPersonResource,
+  IYesterdayProfit,
+  JData,
+  ThreadDetailResponse,
+} from '../types/info';
 
 export const fetchInfo = async (page?: string, ck?: string) => {
   try {
@@ -37,15 +48,6 @@ export const fetchAssets = async (ck?: string) => {
   }
 };
 
-export interface ThreadDetailResponse {
-  title: string;
-  content: {
-    text: string;
-  };
-  createdAt: string;
-  editedAt: string;
-}
-
 export const fetchThreadDetail = async (ck?: string) => {
   try {
     const response = await http.get<ThreadDetailResponse>(
@@ -58,14 +60,6 @@ export const fetchThreadDetail = async (ck?: string) => {
   }
 };
 
-export interface AssetData {
-  label: string;
-  records: {
-    timestamp: string;
-    data: string[];
-  }[];
-}
-
 export const getLocalAssets = async () => {
   try {
     const response = await http.get<AssetData[]>(`/info/getLocalAssets`);
@@ -76,22 +70,6 @@ export const getLocalAssets = async () => {
   }
 };
 
-export interface CollectsRes {
-  iRet: string;
-  sMsg: string;
-  itemidList: { [key: string]: string };
-  typeArr: { [key: string]: number };
-  count: string;
-  nickName: string;
-  headImg: string;
-  milestoneHolds: string;
-  sCollectionHolds: string;
-  loginDayHolds: string;
-  isGiftDay: boolean;
-  isShowRankNum: boolean;
-  rankNum: string;
-}
-
 export const getCollects = async (ck: string) => {
   try {
     const response = await http.get<CollectsRes>(`/info/getCollects?ck=${ck}`);
@@ -101,11 +79,6 @@ export const getCollects = async (ck: string) => {
     return null;
   }
 };
-
-export interface CookieItem {
-  label: string;
-  value: string;
-}
 
 // 新增：获取 Cookie 对象列表
 export const fetchCookieList = async () => {
@@ -151,28 +124,6 @@ export const updateCookieItem = async (label: string, value: string) => {
   }
 };
 
-export interface IYesterdayProfit {
-  currentTime: string;
-  solDetail: SolDetail;
-}
-
-export interface SolDetail {
-  recentGain: number;
-  recentGainDate: string;
-  userCollectionTop: UserCollectionTop;
-}
-
-export interface UserCollectionTop {
-  date: string;
-  list: List[];
-}
-
-export interface List {
-  count: string;
-  objectID: string;
-  price: string;
-}
-
 export const getYesterdayProfit = async (ck: string) => {
   try {
     const response = await http.get<IYesterdayProfit>(
@@ -184,11 +135,6 @@ export const getYesterdayProfit = async (ck: string) => {
     return null;
   }
 };
-
-export type DailySecretResponse = Array<{
-  mapName: string;
-  key: number;
-}>;
 
 /**
  * 获取每日情报（地图信息）。
@@ -207,54 +153,26 @@ export const getDailySecret = async (ck: string): Promise<DailySecretResponse> =
   }
 };
 
-export type IPersonResource = {
-  redTotalMoney: number;
-  redTotalCount: number;
-  mapList: MapList[];
-  redCollectionDetail: RedCollectionDetail[];
-  levelScore: string;
-  majorLevel: string;
-  majorLevelMax: string;
-  profitLossRatio: string;
-  highKillDeathRatio: string;
-  lowKillDeathRatio: string;
-  medKillDeathRatio: string;
-  totalEscape: string;
-  totalFight: string;
-  totalGainedPrice: string;
-  totalGameTime: string;
-  totalKill: string;
-  userRank: number;
-  gunPlayList: GunPlayList[];
-} | null;
-
-interface GunPlayList {
-  objectID: number;
-  escapeCount: number;
-  fightCount: number;
-  totalPrice: number;
-}
-
-interface RedCollectionDetail {
-  objectID: number;
-  count: number;
-  price: number;
-}
-
-interface MapList {
-  mapID: number;
-  totalCount: number;
-  leaveCount: number;
-}
-
 export const getPersonResource = async (
   ck: string,
   seasonid: string,
   isAllSeason?: boolean
-): Promise<IPersonResource | null> => {
+): Promise<IPersonResource> => {
   try {
     const response = await http.get<IPersonResource>(
       `/info/getPersonResource${ck ? '?ck=' + ck : ''}&seasonid=${seasonid} &isAllSeason=${isAllSeason}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getManufacturingDetails = async (ck: string): Promise<IManufacturingDetails> => {
+  try {
+    const response = await http.get<IManufacturingDetails>(
+      `/info/getManufacturingDetails${ck ? '?ck=' + ck : ''}`
     );
     return response;
   } catch (error) {

@@ -36,3 +36,21 @@ export const formatNumberToKMB = (num: number | string): string => {
   }
   return number.toString();
 };
+
+/**
+ * 将秒数格式化为 HH:MM:SS 字符串。
+ * @param totalSeconds 总秒数。
+ * @returns 格式化后的 HH:MM:SS 字符串。
+ */
+export const formatCountdown = (totalSeconds: number): string => {
+  if (isNaN(totalSeconds) || totalSeconds < 0) {
+    return '00:00:00';
+  }
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  const pad = (num: number) => num.toString().padStart(2, '0');
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};

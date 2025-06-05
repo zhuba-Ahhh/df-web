@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getDailySecret, DailySecretResponse } from '../services/info'; // 确保路径正确
+import { getDailySecret } from '../services/info'; // 确保路径正确
+import { DailySecretResponse } from 'types/info';
 
 interface DailySecretCardProps {
   ck: string;

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { CollectsRes, getCollects } from '../services/info';
+import { getCollects } from '../services/info';
 import { useAppContext } from 'contexts/AppProvider';
 import { InfoFilters } from 'components/InfoFilters';
 import { useInfoData } from 'hooks/useInfoData';
+import { CollectsRes } from 'types/info';
 
 const CollectsVew = () => {
   const [data, setData] = useState<CollectsRes | null>(null);

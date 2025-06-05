@@ -11,6 +11,7 @@ import { useInfoData } from '../hooks/useInfoData';
 import { InfoFilters } from '../components/InfoFilters';
 import { YesterdayProfitCard } from '../components/YesterdayProfitCard';
 import { DailySecretCard } from 'components/DailySecretCard';
+import { ManufacturingCard } from 'components/ManufacturingCard'; // 新增导入
 
 const renderText = (pullStatus: PullStatus, percent: number) => {
   switch (pullStatus) {
@@ -106,7 +107,6 @@ const InfoView = () => {
           ck={ck}
           changeCk={changeCk}
         />
-
         {careerData && (
           <CareerCard
             data={careerData}
@@ -117,7 +117,7 @@ const InfoView = () => {
         )}
 
         {ck && <DailySecretCard ck={ck} />}
-
+        {ck && <ManufacturingCard ck={ck} />}
         {ck && <YesterdayProfitCard ck={ck} />}
 
         {filteredData?.map((item, index) => (
@@ -129,15 +129,12 @@ const InfoView = () => {
             <InfoCard item={item} />
           </div>
         ))}
-
         {inView && hasMore && (
           <div className="flex justify-center pt-4">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
-
         <div ref={InViewRef} style={{ height: '1px' }} />
-
         {!hasMore && filteredData.length > 0 && (
           <div className="text-center text-gray-500 pb-4">没有更多数据了</div>
         )}
