@@ -94,7 +94,15 @@ export const fetchCookieList = async () => {
 // 新增：初始化 Cookie 列表（接收初始数据数组）
 export const initCookieList = async (initialData: CookieItem[]) => {
   try {
-    const response = await http.post<CookieItem[]>(`/info/initCookieList`, initialData);
+    // 构建查询参数
+    const params = initialData
+      .map((item) =>
+        Object.entries(item)
+          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+          .join('&')
+      )
+      .join('&');
+    const response = await http.get<CookieItem[]>(`/info/initCookieList?${params}`);
     return response;
   } catch (error) {
     console.error(error);
@@ -105,7 +113,11 @@ export const initCookieList = async (initialData: CookieItem[]) => {
 // 新增：新增 Cookie 对象（参数类型为 Omit<CookieItem, 'id'>，即不包含 id）
 export const addCookieItem = async (item: CookieItem) => {
   try {
-    const response = await http.post<CookieItem>(`/info/addCookie`, item);
+    // 构建查询参数
+    const params = Object.entries(item)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&');
+    const response = await http.get<CookieItem>(`/info/addCookie?${params}`);
     return response;
   } catch (error) {
     console.error(error);
@@ -116,7 +128,9 @@ export const addCookieItem = async (item: CookieItem) => {
 // 新增：修改 Cookie 对象（通过 label 匹配，更新 value）
 export const updateCookieItem = async (label: string, value: string) => {
   try {
-    const response = await http.post<CookieItem | null>(`/info/editCookie`, { label, value });
+    const response = await http.get<CookieItem | null>(
+      `/info/editCookie?label=${encodeURIComponent(label)}&value=${encodeURIComponent(value)}`
+    );
     return response;
   } catch (error) {
     console.error(error);
