@@ -5,7 +5,7 @@
   "license": "MIT",
   "homepage": "https://zhuba-ahhh.github.io/df-web/",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "commit": "commit",
@@ -72,6 +72,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-external": "^4.3.1",
     "vite-plugin-imagemin": "^0.6.1",
+    "vite-plugin-qrcode": "^0.2.4",
     "vite-plugin-svgr": "4.2.0",
     "vite-tsconfig-paths": "^4.0.3"
   }

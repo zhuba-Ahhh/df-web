@@ -5,6 +5,7 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { visualizer } from 'rollup-plugin-visualizer';
 import viteImagemin from 'vite-plugin-imagemin';
 import importToCDN from 'vite-plugin-cdn-import';
+import { qrcode } from 'vite-plugin-qrcode';
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-unused-modules
@@ -30,6 +31,7 @@ export default defineConfig({
       // 打包完成后自动打开浏览器，显示产物体积报告
       open: false,
     }),
+    qrcode(),
     importToCDN({
       // enableInDevMode: true,
       modules: ['react', 'react-dom', 'axios'],
