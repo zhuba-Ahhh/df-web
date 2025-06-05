@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
-import {
-  fetchInfo,
-  fetchSeason,
-  fetchAssets,
-  getPersonResource,
-  IPersonResource,
-} from '../services/info';
-import type { Datum, JData } from '../types/info';
+import { fetchInfo, fetchSeason, fetchAssets, getPersonResource } from '../services/info';
+import type { Datum, IPersonResource, JData } from '../types/info';
 import { useAppContext } from 'contexts/AppProvider';
 
 export const useInfoData = () => {
