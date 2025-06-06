@@ -84,6 +84,9 @@ export const getCollects = async (ck: string) => {
 export const fetchCookieList = async () => {
   try {
     const response = await http.get<CookieItem[]>(`/info/getCookieList`);
+    if (typeof response === 'string') {
+      return JSON.parse(response) as CookieItem[];
+    }
     return response;
   } catch (error) {
     console.error(error);

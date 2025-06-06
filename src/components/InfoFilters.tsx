@@ -30,12 +30,12 @@ export const InfoFilters = ({
   const mapOptions = selectedMap
     ? [
         { value: 'all', label: '全部地图' },
-        ...Object.entries(context?.mapName || {})
-          .map(([value, label]) => ({
+        ...(Object.entries(context?.mapName || {})
+          ?.map(([value, label]) => ({
             value,
             label,
           }))
-          .filter((item) => Number(item.value) > 1000),
+          .filter((item) => Number(item.value) > 1000) || []),
       ]
     : [];
 
@@ -49,7 +49,7 @@ export const InfoFilters = ({
         >
           {ckOptions
             ?.filter((item) => item.value !== 'custom')
-            .map((option) => (
+            ?.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>

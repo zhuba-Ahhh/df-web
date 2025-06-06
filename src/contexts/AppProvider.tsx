@@ -35,7 +35,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       ck,
       seasonid,
       updateConfig,
-      ckOptions,
+      ckOptions: ckOptions.filter((item) => item && item.label && item.value),
     });
   }, [isMenuCollapsed, toggleMenu, updateConfig]);
 
